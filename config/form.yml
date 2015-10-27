@@ -1,0 +1,40 @@
+title: Diversity Survey
+intro: Intro Text
+questions: 
+  -
+    key: hispanic
+    text: Are you Hispanic or Latino?
+    type: radio
+    values:
+      - yes|Yes
+      - no|No
+      - decline|Prefer Not To Answer
+  -
+    key: race
+    text: What is your racial identity?
+    type: checkbox
+    values:
+      - indian|American Indian or Alaska Native
+      - asian|Asian
+      - black|Black or African American
+      - polynesian|Native Hawaiian or other Pacific Islander
+      - white|White
+      - other|Other
+      - decline|Prefer Not To Answer
+  -
+    key: gender
+    text: What is your gender?
+    type: radio
+    values:
+      - male|Male
+      - female|Female
+      - other|Other
+      - decline|Prefer Not To Answer
+  -
+    key: lgbt
+    text: Do you identify as LGBT?
+    type: radio
+    values:
+      - Yes
+      - No
+      - decline|Prefer Not To Answer

@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
 # Use SCSS for stylesheets
@@ -18,7 +17,7 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-gem "sqlite3"
+gem 'sqlite3'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -29,56 +28,53 @@ gem "sqlite3"
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem "bourbon", "~> 4.2.0"
-gem "coffee-rails", "~> 4.1.0"
-gem "flutie"
-gem "high_voltage"
-gem "jquery-rails"
-gem "neat", "~> 1.7.0"
-gem "normalize-rails", "~> 3.0.0"
-gem "pg"
-gem "puma"
-gem "sass-rails", "~> 5.0"
-gem "simple_form"
-gem "title"
+gem 'bourbon', '~> 4.2.0'
+gem 'flutie'
+gem 'high_voltage'
+gem 'neat', '~> 1.7.0'
+gem 'normalize-rails', '~> 3.0.0'
+gem 'pg'
+gem 'puma'
+gem 'simple_form'
+gem 'title'
+gem 'ice_nine'
 
 group :production do
-  gem "rails_12factor"
+  gem 'rails_12factor'
 end
 
 group :development do
-  gem "refills"
-  gem "spring"
-  gem "spring-commands-rspec"
-  gem "web-console"
+  gem 'refills'
+  gem 'spring'
+  gem 'spring-commands-rspec'
+  gem 'web-console'
 end
 
 group :development, :test do
-  gem "awesome_print"
-  gem "bundler-audit", require: false
-  gem "byebug"
-  gem "dotenv-rails"
-  gem "factory_girl_rails"
-  gem "i18n-tasks"
-  gem "pry-rails"
-  gem "rspec-rails", "~> 3.3.0"
+  gem 'awesome_print'
+  gem 'bundler-audit', require: false
+  gem 'byebug'
+  gem 'dotenv-rails'
+  gem 'factory_girl_rails'
+  gem 'i18n-tasks'
+  gem 'pry-rails'
+  gem 'rspec-rails', '~> 3.3.0'
 end
 
 group :test do
-  gem "capybara-webkit"
-  gem "database_cleaner"
-  gem "formulaic"
-  gem "launchy"
-  gem "shoulda-matchers"
-  gem "simplecov", require: false
-  gem "timecop"
-  gem "webmock"
+  gem 'capybara-webkit'
+  gem 'database_cleaner'
+  gem 'formulaic'
+  gem 'launchy'
+  gem 'shoulda-matchers'
+  gem 'simplecov', require: false
+  gem 'timecop'
+  gem 'webmock'
 end
 
 group :staging, :production do
-  gem "rack-timeout"
+  gem 'rack-timeout'
 end

@@ -12,6 +12,13 @@ class Question
     @hash['text']
   end
 
-  def input_type
+  def question_type
+    @hash['type']
+  end
+
+  def choices
+    @hash['values'].map do |v|
+      v.split("|")
+    end
   end
 end

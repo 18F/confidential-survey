@@ -1,5 +1,5 @@
 # The only controller we need for handling the survey form for now
-class FormController < ApplicationController
+class SurveyController < ApplicationController
   before_filter :load_survey
 
   def show

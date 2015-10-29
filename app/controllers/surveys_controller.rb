@@ -1,11 +1,11 @@
 # The only controller we need for handling the survey form for now
-class SurveyController < ApplicationController
+class SurveysController < ApplicationController
   before_filter :load_survey
 
   def new
   end
 
-  def submit
+  def create
     raise params.inspect
   end
 

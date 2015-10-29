@@ -2,7 +2,7 @@
 class SurveyController < ApplicationController
   before_filter :load_survey
 
-  def show
+  def new
   end
 
   def submit

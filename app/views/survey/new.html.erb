@@ -1,0 +1,12 @@
+<%= simple_form_for @survey do |f| %>
+  <%- @survey.questions.each do |question| %>
+    <%- case question.question_type %>
+    <%- when 'radio' %>
+      <%= f.input question.key, label: question.text, as: :radio_buttons, collection: question.choices %>
+    <%- when 'checkbox' %>
+      <%= f.input question.key, label: question.text, as: :check_boxes, collection: question.choices %>
+    <%- when 'text' %>
+    <%- else %>
+    <%- end %>
+  <%- end %>
+<%- end %>

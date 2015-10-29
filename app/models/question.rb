@@ -17,8 +17,13 @@ class Question
   end
 
   def choices
-    @hash['values'].map do |v|
-      v.split("|")
+    out = {}
+
+    @hash['values'].each do |v|
+      key, label = v.split("|", 2)
+      out[label] = key.nil? ? label : key  # use 
     end
+
+    out
   end
 end

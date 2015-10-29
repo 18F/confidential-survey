@@ -35,6 +35,6 @@ questions:
     text: Do you identify as LGBT?
     type: radio
     values:
-      - Yes
-      - No
+      - yes|Yes
+      - no|No
       - decline|Prefer Not To Answer

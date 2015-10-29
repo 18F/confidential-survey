@@ -20,6 +20,9 @@ class Survey
     @hash['questions'].map {|h| Question.new(h)}
   end
 
+  def record(responses)
+  end
+
   def method_missing(method_sym, *arguments, &block)
     if @hash['questions'].any? {|h| h['key'] == method_sym.to_s }
       nil

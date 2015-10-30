@@ -41,6 +41,7 @@ gem 'puma'
 gem 'simple_form'
 gem 'title'
 gem 'ice_nine'
+gem 'memoist'
 
 group :production do
   gem 'rails_12factor'

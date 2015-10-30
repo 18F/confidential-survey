@@ -10,6 +10,6 @@ require 'rails_helper'
 #     end
 #   end
 # end
-RSpec.describe FormHelper, type: :helper do
+RSpec.describe SurveyHelper, type: :helper do
   pending "add some examples to (or delete) #{__FILE__}"
 end

@@ -12,7 +12,7 @@ questions:
   -
     key: favorite-flavor
     text: What is your favorite flavor?
-    type: exclusive-or-combination
+    type: exclusive-combo
     values:
       - chocolate|Chocolate
       - strawberry|Strawberry
@@ -22,7 +22,7 @@ questions:
   -
     key: favorite-toppings
     text: What are you favorite toppings?
-    type: exclusive-or-combination
+    type: exclusive-combo
     values:
       - Sprinkles
       - Brownies

@@ -11,16 +11,34 @@ class Survey
     false
   end
 
-  def initialize(name: 'form')
-    hash = YAML::load(File.open(Rails.root.join('config', "#{name}.yml")))
+  def initialize(arg)
+    hash = case arg
+           when String
+             YAML.load(File.open(Rails.root.join('config', "#{arg}.yml")))
+           when Hash
+             arg
+           else
+             fail 'Not implemented yet'
+           end
+      
     @hash = IceNine.deep_freeze(hash)
   end
 
   def questions
-    @hash['questions'].map {|h| Question.new(h)}
+    if @questions.nil?
+      @questions = @hash['questions'].map {|h| Question.new(h)}
+    end
+
+    @questions
   end
 
   def record(responses)
+    responses.each do |key, answers|
+      q = questions.detect {|q| q.key == key}
+      raise "Question #{key} not found" if q.nil?
+      
+      q.record(answers)
+    end
   end
 
   def method_missing(method_sym, *arguments, &block)

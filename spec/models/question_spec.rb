@@ -25,8 +25,8 @@ describe Question do
     specify { expect(subject.question_type).to eq(hash['type']) }
     
     it 'should extract the questions into a hash' do
-      expect(subject.choices).to be_a(Hash)
-      expect(subject.choices['American Indian or Alaska Native']).to eq('indian')
+      expect(subject.choices_for_form).to be_a(Hash)
+      expect(subject.choices_for_form['American Indian or Alaska Native']).to eq('indian')
     end
 
     it 'should parameterize fields if not provided' do
@@ -36,8 +36,8 @@ describe Question do
         'values' => ['Yes', 'No', 'Decline To Answer'] }
 
       q = Question.new(hash2)
-      expect(q.choices['Yes']).to eq('yes')
-      expect(q.choices['Decline To Answer']).to eq('decline-to-answer')
+      expect(q.choices_for_form['Yes']).to eq('yes')
+      expect(q.choices_for_form['Decline To Answer']).to eq('decline-to-answer')
     end
   end
 end

@@ -5,7 +5,7 @@ describe Question do
     let(:hash) do
       { 'key' => 'race',
         'text' => 'What is your racial identity?',
-        'type' => 'checkbox',
+        'type' => 'exclusive',
         'values' => [
           'indian|American Indian or Alaska Native',
           'asian|Asian',
@@ -24,9 +24,20 @@ describe Question do
     specify { expect(subject.text).to eq(hash['text']) }
     specify { expect(subject.question_type).to eq(hash['type']) }
     
-    it 'should extract the questions in an array of pairs' do
-      expect(subject.choices).to be_a(Array)
-      expect(subject.choices[0]).to eq(['indian', 'American Indian or Alaska Native'])
+    it 'should extract the questions into a hash' do
+      expect(subject.choices).to be_a(Hash)
+      expect(subject.choices['American Indian or Alaska Native']).to eq('indian')
+    end
+
+    it 'should parameterize fields if not provided' do
+      hash2 = {
+        'key' => 'foo',
+        'type' => 'exclusive',
+        'values' => ['Yes', 'No', 'Decline To Answer'] }
+
+      q = Question.new(hash2)
+      expect(q.choices['Yes']).to eq('yes')
+      expect(q.choices['Decline To Answer']).to eq('decline-to-answer')
     end
   end
 end

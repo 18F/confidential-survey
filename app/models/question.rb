@@ -20,8 +20,24 @@ class Question
     out = {}
 
     @hash['values'].each do |v|
-      key, label = v.split("|", 2)
-      out[label] = key.nil? ? label : key  # use 
+      key, label = nil
+
+      case v
+      when String
+        key, label = v.split("|", 2)
+        if label.nil?
+          label = key
+          key = label.parameterize
+        end
+      when true
+        key = 'yes'
+        label = 'Yes'
+      when false
+        key = 'no'
+        label = 'No'
+      end
+
+      out[label] = key
     end
 
     out

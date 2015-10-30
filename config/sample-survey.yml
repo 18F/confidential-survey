@@ -1,0 +1,49 @@
+title: Test Survey
+intro: Introductory Text
+questions:
+  -
+    key: ice-cream
+    text: Do you like ice cream?
+    type: exclusive
+    values:
+      - Yes
+      - No
+      - Sometimes
+  -
+    key: favorite-flavor
+    text: What is your favorite flavor?
+    type: exclusive-or-combination
+    values:
+      - chocolate|Chocolate
+      - strawberry|Strawberry
+      - vanilla|Vanilla
+      - rocky|Rocky Road
+      - none|None
+  -
+    key: favorite-toppings
+    text: What are you favorite toppings?
+    type: exclusive-or-combination
+    values:
+      - Sprinkles
+      - Brownies
+      - Chocolate Chips
+      - Broccoli
+      - Heath Bar
+  -
+    key: desserts
+    text: What other desserts do you like?
+    type: multiple
+    shuffle: true
+    values:
+      - Cupcakes
+      - Cake
+      - Candy
+      - Cookies
+      - Flan
+      - Frozen Yogurt
+      - Kale
+      - None
+  -
+    key: name
+    text: What is the brand of your favorite ice cream?
+    type: freeform

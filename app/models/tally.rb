@@ -16,4 +16,8 @@ class Tally < ActiveRecord::Base
     t = where(field: field, value: value).first
     t.nil? ? 0 : t.count
   end
+
+  def to_s
+    "Tally #{field} \"#{value}\": #{count}"
+  end
 end

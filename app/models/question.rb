@@ -4,6 +4,8 @@ require 'memoist'
 class Question
   extend Memoist
 
+  COMBINATION_VALUE = 'combination'
+
   def initialize(hash={})
     @hash = hash.dup.freeze
   end
@@ -86,7 +88,7 @@ class Question
       Tally.record(key, responses.first)
     when exclusive_combo?
       if responses.length > 1
-        Tally.record(key, 'multiple')
+        Tally.record(key, COMBINATION_VALUE)
       else
         Tally.record(key, responses.first)
       end

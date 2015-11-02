@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151023135410) do
+ActiveRecord::Schema.define(version: 20151102154115) do
 
   create_table "tallies", force: :cascade do |t|
     t.string   "field",      limit: 1024,             null: false
@@ -19,8 +19,9 @@ ActiveRecord::Schema.define(version: 20151023135410) do
     t.integer  "count",                   default: 0, null: false
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.string   "survey_id"
   end
 
-  add_index "tallies", ["field", "value"], name: "index_tallies_on_field_and_value", unique: true
+  add_index "tallies", ["field", "value", "survey_id"], name: "index_tallies_on_field_and_value_and_survey_id", unique: true
 
 end

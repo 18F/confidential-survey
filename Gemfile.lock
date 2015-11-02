@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/18F/us_web_design_standards_gem.git
+  revision: 7739737bcfd947f66e9209773ade349d8541ec33
+  specs:
+    us_web_design_standards (0.0.1)
+      railties
+      sass (~> 3.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -282,7 +290,6 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
-  bourbon (~> 4.2.0)
   bundler-audit
   byebug
   capybara-webkit
@@ -322,6 +329,7 @@ DEPENDENCIES
   title
   tzinfo-data
   uglifier (>= 1.3.0)
+  us_web_design_standards!
   web-console
   webmock
 

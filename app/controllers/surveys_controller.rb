@@ -2,16 +2,16 @@
 class SurveysController < ApplicationController
   before_filter :load_survey
 
-  def new
+  def show
   end
 
-  def create
+  def submit
     raise params.inspect
   end
 
   private
 
   def load_survey
-    @survey = Survey.new
+    @survey = Survey.new(params[:id])
   end
 end

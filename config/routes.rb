@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
 
-  resource :surveys, :only => [:new, :create]
-  root "surveys#new"
+  get 'surveys/:id' => 'surveys#show'
+  post 'surveys/:id' => 'surveys#submit', as: 'survey_submit'
 
-  # The priority iys based upon order of creation: first created -> highest priority.
+  # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"

@@ -1,0 +1,19 @@
+<%= simple_form_for @survey, url: survey_submit_path(id: @survey.id) do |f| %>
+  <%- @survey.questions.each do |question| %>
+    <%- case question.question_type %>
+    <%- when 'exclusive' %>
+      <%= f.input question.key, label: question.text, as: :radio_buttons, collection: question.choices %>
+    <%- when 'exclusive', 'exclusive-combo' %>
+    <%= f.input question.key,
+        label: question.text,
+        as: :check_boxes,
+        collection: question.choices,
+        input_html: { class: 'usa-unstyled-list' } %>
+    <%- when 'freeform' %>
+      <%= f.input question.key, label: question.text %>
+    <%- else %>
+    <%- end %>
+  <%- end %>
+
+  <%= f.submit 'Submit Response' %>
+<%- end %>

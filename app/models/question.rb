@@ -3,10 +3,12 @@ require 'memoist'
 # This is not backed to the database, but just initialized by loading the form
 class Question
   extend Memoist
-
+  attr_reader :survey_id
+  
   COMBINATION_VALUE = 'combination'
 
-  def initialize(hash={})
+  def initialize(survey_id, hash={})
+    @survey_id = survey_id
     @hash = hash.dup.freeze
   end
 
@@ -82,19 +84,19 @@ class Question
 
     case
     when freeform?
-      Tally.record(key, responses.first)
+      Tally.record(survey_id, key, responses.first)
     when exclusive?
       raise "Multple responses for an exclusive question" if responses.length > 1
-      Tally.record(key, responses.first)
+      Tally.record(survey_id, key, responses.first)
     when exclusive_combo?
       if responses.length > 1
-        Tally.record(key, COMBINATION_VALUE)
+        Tally.record(survey_id, key, COMBINATION_VALUE)
       else
-        Tally.record(key, responses.first)
+        Tally.record(survey_id, key, responses.first)
       end
     when multiple?
       responses.each do |r|
-        Tally.record(key, r)
+        Tally.record(survey_id, key, r)
       end
     end
   end

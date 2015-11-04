@@ -24,13 +24,15 @@ exact value if they select a single one or `combination` if they pick more than 
 - **multiple** record each choice picked by a user
 - **freefrom** accept freeform text
 
-So what? I'll admit that ice cream is a dumb example.
-This sounds like something you could setup with SurveyMonkey or Google
+So what? I'll admit that ice cream is a dumb example. It's something you could
+setup with an existing public service like SurveyMonkey or Google
 Forms, but imagine we wanted to ask questions about something more confidential
-like employee diversity or sexual orientation or something. These systems all
+like employee diversity or sexual orientation. These systems all
 collect individual responses as records or rows in a spreadsheet. While they are
 probably secure, why do I need this detailed information if I am just going to generate
-summary statistics anyway? Why should I be asking people to trust me that nobody
+summary statistics anyway? Individual responses might be anonymous, but may
+endanger a respondent's privacy when combined together in a query.
+Why should I be asking people to trust me that nobody
 will use these records to drill down and do something awful like count how many
 LGBT people are in the accounting department of the NYC office? What if the
 data collection only allowed for pre-approved interpretations?

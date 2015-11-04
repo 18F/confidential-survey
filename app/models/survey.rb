@@ -29,6 +29,7 @@ class Survey
   def survey_id
     @hash['id']
   end
+  alias_method :id, :survey_id
 
   def questions
     if @questions.nil?

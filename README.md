@@ -67,7 +67,7 @@ could harm the privacy of individuals
 
 This program will have the following components:
 - A simple single-table DB schema for storing the counters
-- A way to represent survey forms with YAML for easy rendering into forms
+- A way to [represent survey forms with YAML](config/surveys/sample-survey.yml) for easy rendering into forms
 - The ability to specify intersection between variables you want more
   detailed breakdowns of
 - A simple API endpoint for returning the data collected.

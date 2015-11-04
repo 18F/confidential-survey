@@ -15,19 +15,21 @@ class Survey
   def initialize(arg)
     hash = case arg
            when String
-             YAML.load(File.open(Rails.root.join('config', "#{arg}.yml")))
+             YAML.load(File.open(Rails.root.join('config', 'surveys', "#{arg}.yml")))
+               .merge({'id': arg}) 
            when Hash
              arg
            else
              fail 'Not implemented yet'
            end
+    
     @hash = IceNine.deep_freeze(hash)
 
     validate_survey
   end
 
   def survey_id
-    @hash['id']
+    @hash[:id]
   end
   alias_method :id, :survey_id
 

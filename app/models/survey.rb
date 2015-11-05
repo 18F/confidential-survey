@@ -28,6 +28,14 @@ class Survey
     validate_survey
   end
 
+  def title
+    @hash[:title]
+  end
+
+  def description
+    @hash[:description]
+  end
+  
   def survey_id
     @hash[:id]
   end
@@ -84,6 +92,20 @@ class Survey
 
   def tally_for(field, value)
     Tally.tally_for(survey_id, field, value)
+  end
+
+  def tallies
+    Tally.where(survey_id: survey_id)
+  end
+  
+  def as_json
+    {
+      id: survey_id,
+      title: title,
+      description: description,
+      questions: questions.map {|q| q.as_json},
+      results: tallies.map {|t| t.as_json }
+    }
   end
   
   private

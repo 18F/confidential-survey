@@ -31,6 +31,8 @@ class Question
     choices_for_form.each do |label, key|
       out[key] = label
     end
+
+    out
   end
 
   def choices_for_form
@@ -99,5 +101,14 @@ class Question
         [key, r]
       end
     end
+  end
+
+  def as_json
+    {
+      key: key,
+      text: text,
+      type: question_type,
+      choices: choices
+    }
   end
 end

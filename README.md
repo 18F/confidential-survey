@@ -37,7 +37,7 @@ will use these records to drill down and do something awful like count how many
 LGBT people are in the accounting department of the NYC office? What if the
 data collection only allowed for pre-approved interpretations?
 
-This program is **being written** (honestly, it doesn't work yet!) to accept
+This program is **being written** (honestly, it doesn't work that well yet) to accept
 survey submissions and just use them to increment counters without saving the
 responses to a single record. Instead, the survey would result in a collection
 of counters like this
@@ -69,7 +69,21 @@ could harm the privacy of individuals
 
 This program will have the following components:
 - A simple single-table DB schema for storing the counters
-- A way to [represent survey forms with YAML](config/surveys/sample-survey.yml) for easy rendering into forms
-- The ability to specify intersection between variables you want more
+- A way to [represent survey forms with YAML](config/surveys/sample-survey.yml)
+  for easy rendering into forms
+- The ability to specify _intersections_ between variables you want more
   detailed breakdowns of
 - A simple API endpoint for returning the data collected.
+
+## Caveats
+
+- This program is written to minimize the amount of information collected to
+  help preserve the anonymity of respondents, but I can not explicitly _guarantee_
+  that respondents will always be anonymous. I am trying the best I can, but I am
+  not an expert in cryptography and anonymity.
+- To protect the anonymity of whether users have submitted any responses or not,
+  this program explicitly does not use cookies or other means to identify specific
+  users. This means there are no protections against ballot-box stuffing
+- HTTP server logs make it impossible for me to guarantee a user's participation
+  on a particular survey is anonymous, unless server logs are scrubbed. If you are
+  particularly concerned, please use TOR

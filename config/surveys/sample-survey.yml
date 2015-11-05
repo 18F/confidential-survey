@@ -11,7 +11,7 @@ questions:
       - No
       - Sometimes
   -
-    key: favorite-flavor
+    key: flavor
     text: What is your favorite flavor?
     type: exclusive-combo
     values:
@@ -21,9 +21,9 @@ questions:
       - rocky|Rocky Road
       - none|None
   -
-    key: favorite-toppings
+    key: toppings
     text: What are you favorite toppings?
-    type: exclusive-combo
+    type: multiple
     values:
       - Sprinkles
       - Brownies
@@ -48,3 +48,10 @@ questions:
     key: name
     text: What is the brand of your favorite ice cream?
     type: freeform
+intersections:
+  -
+    - flavor
+    - toppings
+  -
+    - toppings
+    - flavor

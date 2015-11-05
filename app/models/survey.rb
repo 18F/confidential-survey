@@ -41,12 +41,43 @@ class Survey
     @questions
   end
 
+  def intersections
+    @hash['intersections']
+  end
+  
   def record(responses)
+    pending = {}
+
     responses.each do |key, answers|
       q = questions.detect { |q| q.key == key }
       fail "Question #{key} not found" if q.nil?
       
-      q.record(answers)
+      q.response_pairs(answers).each do |pair|
+        pending[pair.first] ||= []
+        pending[pair.first] << pair.last
+      end
+    end
+
+    pending.each do |key, values|
+      values.each do |value|
+        Tally.record(survey_id, key, value)
+      end
+    end
+
+    # now compute the intersection tallies
+    intersections.each do |fields|
+      key = fields.join('|')
+      all_values = fields.map { |f| pending[f] }
+
+      # Skip if any field in the intersection is a nil
+      next if all_values.any? { |a| a.nil? }
+
+      # do a Cartesian Product of all combos of each element in each array
+      cp = all_values.reduce(&:product).map(&:flatten)
+
+      cp.each do |arr|
+        Tally.record(survey_id, key, arr.flatten.join('|'))
+      end
     end
   end
 

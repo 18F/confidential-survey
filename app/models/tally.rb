@@ -6,6 +6,7 @@ class Tally < ActiveRecord::Base
                                     greater_than_or_equal_to: 0 }
 
   def self.record(survey_id, field, value)
+    #puts "  +1 #{survey_id}:#{field}:#{value}"
     t = where(survey_id: survey_id, field: field, value: value).first_or_create
     t.increment!(:count)
     t

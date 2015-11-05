@@ -49,6 +49,7 @@ class Survey
     pending = {}
 
     responses.each do |key, answers|
+      next if key == 'id'
       q = questions.detect { |q| q.key == key }
       fail "Question #{key} not found" if q.nil?
       

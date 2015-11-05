@@ -17,6 +17,18 @@ class Tally < ActiveRecord::Base
     t.nil? ? 0 : t.count
   end
 
+  def as_json
+    fields = field.split('|')
+    values = value.split('|')
+    
+    {
+      intersection: fields.length > 1,
+      field: fields.length == 1 ? fields.first : fields,
+      value: values.length == 1 ? values.first : values,
+      count: count
+    }
+  end
+
   def to_s
     "Tally #{survey_id}:#{field} \"#{value}\": #{count}"
   end

@@ -3,6 +3,10 @@ class SurveysController < ApplicationController
   before_filter :load_survey, only: [:submit, :show, :results]
 
   def show
+    respond_to do |format|
+      format.html {}
+      format.json { render json: @survey.as_json }
+    end
   end
 
   def submit

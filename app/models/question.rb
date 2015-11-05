@@ -31,6 +31,8 @@ class Question
     choices_for_form.each do |label, key|
       out[key] = label
     end
+
+    out
   end
 
   def choices_for_form

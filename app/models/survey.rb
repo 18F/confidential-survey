@@ -28,6 +28,14 @@ class Survey
     validate_survey
   end
 
+  def title
+    @hash[:title]
+  end
+
+  def description
+    @hash[:description]
+  end
+  
   def survey_id
     @hash[:id]
   end
@@ -41,17 +49,63 @@ class Survey
     @questions
   end
 
+  def intersections
+    @hash['intersections']
+  end
+  
   def record(responses)
+    pending = {}
+
     responses.each do |key, answers|
+      next if key == 'id'
       q = questions.detect { |q| q.key == key }
       fail "Question #{key} not found" if q.nil?
       
-      q.record(answers)
+      q.response_pairs(answers).each do |pair|
+        pending[pair.first] ||= []
+        pending[pair.first] << pair.last
+      end
+    end
+
+    pending.each do |key, values|
+      values.each do |value|
+        Tally.record(survey_id, key, value)
+      end
+    end
+
+    # now compute the intersection tallies
+    intersections.each do |fields|
+      key = fields.join('|')
+      all_values = fields.map { |f| pending[f] }
+
+      # Skip if any field in the intersection is a nil
+      next if all_values.any? { |a| a.nil? }
+
+      # do a Cartesian Product of all combos of each element in each array
+      cp = all_values.reduce(&:product).map(&:flatten)
+
+      cp.each do |arr|
+        Tally.record(survey_id, key, arr.flatten.join('|'))
+      end
     end
   end
 
   def tally_for(field, value)
     Tally.tally_for(survey_id, field, value)
+  end
+
+  def tallies
+    Tally.where(survey_id: survey_id)
+  end
+  
+  def as_json
+    {
+      id: survey_id,
+      title: title,
+      description: description,
+      questions: questions.map {|q| q.as_json},
+      results: tallies.map {|t| t.as_json }
+    }
   end
   
   private

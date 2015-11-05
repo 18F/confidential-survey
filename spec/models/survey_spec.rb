@@ -37,20 +37,20 @@ RSpec.describe Survey, type: :model do
     context 'for a exclusive-combo field' do
       context 'when the user selects one value' do
         it 'should record that field value in the tally' do
-          expect { @survey.record('favorite-flavor' => ['chocolate']) }.to change { @survey.tally_for('favorite-flavor', 'chocolate') }.by(1)
+          expect { @survey.record('flavor' => ['chocolate']) }.to change { @survey.tally_for('flavor', 'chocolate') }.by(1)
         end
       end
 
       context 'when the user selects multiple values' do
-        subject { @survey.record('favorite-flavor' => ['chocolate', 'vanilla']) } 
+        subject { @survey.record('flavor' => ['chocolate', 'vanilla']) } 
 
         it 'should not record counts for those values' do
-          expect { subject }.to_not change { @survey.tally_for('favorite-flavor', 'vanilla') }
-          expect { subject }.to_not change { @survey.tally_for('favorite-flavor', 'chocolate') }
+          expect { subject }.to_not change { @survey.tally_for('flavor', 'vanilla') }
+          expect { subject }.to_not change { @survey.tally_for('flavor', 'chocolate') }
         end
 
         it 'should record a "combination" value in the tally' do
-          expect { subject }.to change { @survey.tally_for('favorite-flavor', Question::COMBINATION_VALUE) }.by(1)
+          expect { subject }.to change { @survey.tally_for('flavor', Question::COMBINATION_VALUE) }.by(1)
         end
       end
     end
@@ -72,6 +72,23 @@ RSpec.describe Survey, type: :model do
     context 'for a freeform field' do
       it "should record the field unchanged" do
         expect { @survey.record('name' => 'Jacob Harris') }.to change { @survey.tally_for('name', 'Jacob Harris') }.by(1)
+      end
+    end
+
+    context 'for an intersection' do
+      before(:all) do
+        Tally.delete_all
+        @survey.record('flavor' => ['chocolate'], 'toppings' => ['sprinkles', 'hot-fudge'])
+        @survey.record('flavor' => ['chocolate'], 'toppings' => ['hot-fudge'])
+      end
+      
+      it 'should count the intersection of both elements' do
+        expect(@survey.tally_for('flavor', 'chocolate')).to eq(2)
+        expect(@survey.tally_for('flavor|toppings', 'chocolate|sprinkles')).to eq(1)
+      end
+
+      it 'should return the same count if the intersection order is reversed' do
+        expect(@survey.tally_for('toppings|flavor', 'sprinkles|chocolate')).to eq(1)
       end
     end
   end

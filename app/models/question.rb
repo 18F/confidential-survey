@@ -31,6 +31,8 @@ class Question
     choices_for_form.each do |label, key|
       out[key] = label
     end
+
+    out
   end
 
   def choices_for_form
@@ -78,26 +80,35 @@ class Question
     question_type == 'multiple'
   end
 
-  def record(responses)
+  def response_pairs(responses)
     responses = [responses] unless responses.is_a?(Array)
     responses = responses.reject {|r| r.blank? }
 
     case
     when freeform?
-      Tally.record(survey_id, key, responses.first)
+      [[key, responses.first]]
     when exclusive?
-      raise "Multple responses for an exclusive question" if responses.length > 1
-      Tally.record(survey_id, key, responses.first)
+      raise 'Multiple responses for an exclusive question' if responses.length > 1
+      [[key, responses.first]]
     when exclusive_combo?
       if responses.length > 1
-        Tally.record(survey_id, key, COMBINATION_VALUE)
+        [[key, COMBINATION_VALUE]]
       else
-        Tally.record(survey_id, key, responses.first)
+        [[key, responses.first]]
       end
     when multiple?
-      responses.each do |r|
-        Tally.record(survey_id, key, r)
+      responses.map do |r|
+        [key, r]
       end
     end
+  end
+
+  def as_json
+    {
+      key: key,
+      text: text,
+      type: question_type,
+      choices: choices
+    }
   end
 end

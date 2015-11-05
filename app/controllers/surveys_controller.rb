@@ -1,14 +1,26 @@
 # The only controller we need for handling the survey form for now
 class SurveysController < ApplicationController
-  before_filter :load_survey
+  before_filter :load_survey, only: [:submit, :show, :results]
 
   def show
+    respond_to do |format|
+      format.html {}
+      format.json { render json: @survey.as_json }
+    end
   end
 
   def submit
-    raise params.inspect
+    if params[:survey][:id] != @survey.id
+      fail 'Survey ID does not match'
+    end
+    
+    @survey.record(params[:survey])
+    redirect_to(action: :thanks)
   end
 
+  def thanks
+  end
+  
   private
 
   def load_survey

@@ -1,18 +1,20 @@
-title: Test Survey
-intro: Introductory Text
-id: survey-20151031
+title: Ice Cream Survey
+intro: This is a sample survey to see how much you _really_ love ice cream.
 questions:
   -
     key: ice-cream
     text: Do you like ice cream?
+    description: Here is a basic choice field
     type: exclusive
     values:
       - Yes
       - No
       - Sometimes
+      - decline|No Thanks
   -
     key: flavor
     text: What is your favorite flavor?
+    description: This is an `exclusive-combo` field. That means that if the user picks more than one choice, we record that as a single value of `combination` rather than each distinct choice made.
     type: exclusive-combo
     values:
       - chocolate|Chocolate
@@ -23,6 +25,7 @@ questions:
   -
     key: toppings
     text: What are you favorite toppings?
+    description: This is a `multiple` field. This counts each choice separately.
     type: multiple
     values:
       - Sprinkles
@@ -47,11 +50,9 @@ questions:
   -
     key: name
     text: What is the brand of your favorite ice cream?
+    description: This is a freeform-text field. Each choice is recorded as-is without any normalization. This means that if a user wrote Apple and another apple, those would be counted separately.
     type: freeform
 intersections:
   -
     - flavor
     - toppings
-  -
-    - toppings
-    - flavor

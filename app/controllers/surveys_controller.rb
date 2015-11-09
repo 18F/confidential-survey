@@ -1,10 +1,10 @@
 # The only controller we need for handling the survey form for now
 class SurveysController < ApplicationController
-  before_filter :load_survey, only: [:submit, :show, :results]
+  before_action :load_survey, only: [:submit, :show, :results]
 
   def show
     respond_to do |format|
-      format.html {}
+      format.html { @md = Redcarpet::Markdown.new(Redcarpet::Render::HTML) }
       format.json { render json: @survey.as_json }
     end
   end

@@ -29,11 +29,11 @@ class Survey
   end
 
   def title
-    @hash[:title]
+    @hash['title']
   end
 
   def description
-    @hash[:description]
+    @hash['description']
   end
   
   def survey_id

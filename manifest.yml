@@ -1,0 +1,9 @@
+---
+applications:
+- name: survey
+  memory: 512M
+  instances: 1
+  host: survey
+  domain: cf.18f.us
+  services:
+  - survey-db

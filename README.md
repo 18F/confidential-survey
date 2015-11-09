@@ -1,4 +1,4 @@
-# Confidential Survey (v 0.0.2)
+# Confidential Survey (v 0.0.3)
 
 This is a prototype application for gathering responses from
 confidential surveys in a way that doesn't result in a large table of
@@ -19,28 +19,31 @@ And so on. We could classify the types of questions here among several
 distinct types to start with:
 
 - **exclusive** allow only one choice from the available options
-- **exclusive-combo** allow people to select multiple choices but record the
-exact value if they select a single one or `combination` if they pick more than one.
+- **exclusive-combo** allow people to select multiple choices but
+  record the exact value if they select a single one or `combination` if
+  they pick more than one.
 - **multiple** record each choice picked by a user
 - **freefrom** accept freeform text
 
-So what? I'll admit that ice cream is a dumb example. It's something you could
-setup with an existing public service like SurveyMonkey or Google
-Forms, but imagine we wanted to ask questions about something more confidential
-like employee diversity or sexual orientation. These systems all
-collect individual responses as records or rows in a spreadsheet. While they are
-probably secure, why do I need this detailed information if I am just going to generate
-summary statistics anyway? Individual responses might be anonymous, but may
-endanger a respondent's privacy when combined together in a query.
-Why should I be asking people to trust me that nobody
-will use these records to drill down and do something awful like count how many
-LGBT people are in the accounting department of the NYC office? What if the
-data collection only allowed for pre-approved interpretations?
+So what? I'll admit that ice cream is a dumb example. It's something
+you could setup with an existing public service like SurveyMonkey or
+Google Forms, but imagine we wanted to ask questions about something
+more confidential like employee diversity or sexual orientation. These
+systems all collect individual responses as records or rows in a
+spreadsheet. While they are probably secure, why do I need this
+detailed information if I am just going to generate summary statistics
+anyway? Individual responses might be anonymous, but may endanger a
+respondent's privacy when combined together in a query.  Why should I
+be asking people to trust me that nobody will use these records to
+drill down and do something awful like count how many LGBT people are
+in the accounting department of the NYC office? What if the data
+collection only allowed for pre-approved interpretations?
 
-This program is **being written** (honestly, it doesn't work yet!) to accept
-survey submissions and just use them to increment counters without saving the
-responses to a single record. Instead, the survey would result in a collection
-of counters like this
+This program is **still being written** (honestly, it doesn't work
+that well yet) to accept survey submissions and just use them to
+increment counters without saving the responses to a single
+record. Instead, the survey would result in a collection of counters
+like this
 
 - like_ice_cream:yes 85
 - like_ice_cream:no 23
@@ -69,7 +72,39 @@ could harm the privacy of individuals
 
 This program will have the following components:
 - A simple single-table DB schema for storing the counters
-- A way to [represent survey forms with YAML](config/surveys/sample-survey.yml) for easy rendering into forms
-- The ability to specify intersection between variables you want more
+- A way to [represent survey forms with YAML](config/surveys/sample-survey.yml)
+  for easy rendering into forms
+- The ability to specify _intersections_ between variables you want more
   detailed breakdowns of
 - A simple API endpoint for returning the data collected.
+
+## Notes on Survey Construction
+
+- I am not a lawyer. Neither is this application. Just because you
+  _can_ use this program to create a survey for people like employees or
+  students, this application doesn't grant you the legal or moral right
+  to do so. Please consult with the appropriate people first.
+- Confidential surveys -- or responses to specific questions within -- should
+  never be mandatory and this program will never include cookies or
+  authentication for that reason.
+- This means there are no protections against users voting more than once. **Do
+  not use this to hold an election.**
+- Whenever possible, users should be presented with an option to
+  explicitly decline to answer. Users always have the option of silently
+  declining by not selecting any choice, but those rejections are simply
+  not counted vs. an active decline
+- Intersections should be used sparingly and in such a way that a specific
+subpopulation can not be used to deanonymize survey respondents.
+
+## Caveats About Anonymity
+
+- This program is written to minimize the amount of information collected to
+  help preserve the anonymity of respondents, but I can not explicitly _guarantee_
+  that respondents will always be anonymous. I am trying the best I can, but I am
+  not an expert in cryptography and anonymity.
+- To protect the anonymity of whether users have submitted any responses or not,
+  this program explicitly does not use cookies or other means to identify specific
+  users. This means there are no protections against ballot-box stuffing
+- HTTP server logs make it impossible for me to guarantee a user's
+  participation on a particular survey is anonymous, unless server logs
+  are also scrubbed. I'd suggest using TOR

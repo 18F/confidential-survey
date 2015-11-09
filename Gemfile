@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.2.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
@@ -16,8 +17,6 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-
-gem 'sqlite3'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -37,15 +36,16 @@ gem 'flutie'
 gem 'high_voltage'
 gem 'neat', '~> 1.7.0'
 gem 'normalize-rails', '~> 3.0.0'
-gem 'pg'
-gem 'puma'
+gem 'unicorn'
 gem 'simple_form'
 gem 'title'
 gem 'ice_nine'
 gem 'memoist'
+gem 'redcarpet'
 
 group :production do
   gem 'rails_12factor'
+  gem 'pg'
 end
 
 group :development do
@@ -56,6 +56,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'sqlite3'
   gem 'awesome_print'
   gem 'bundler-audit', require: false
   gem 'byebug'

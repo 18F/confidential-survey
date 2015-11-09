@@ -201,6 +201,7 @@ GEM
     raindrops (0.15.0)
     rake (10.4.2)
     rdoc (4.2.0)
+    redcarpet (3.3.3)
     refills (0.1.0)
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
@@ -321,6 +322,7 @@ DEPENDENCIES
   rack-timeout
   rails (= 4.2.4)
   rails_12factor
+  redcarpet
   refills
   rspec-rails (~> 3.3.0)
   sass-rails (~> 5.0)

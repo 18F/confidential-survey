@@ -69,6 +69,7 @@ class Survey
 
     pending.each do |key, values|
       values.each do |value|
+        next if value.blank?
         Tally.record(survey_id, key, value)
       end
     end

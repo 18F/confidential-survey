@@ -18,8 +18,6 @@ RSpec.describe Survey, type: :model do
       @survey = Survey.new('sample-survey')
     end
 
-    subject { @survey.record(responses) }
-
     context 'for an exclusive field' do
       it 'should record a tally' do
         expect { @survey.record('ice-cream' => ['yes', '']) }.to change { @survey.tally_for('ice-cream', 'yes') }.by(1)
@@ -73,6 +71,10 @@ RSpec.describe Survey, type: :model do
       it "should record the field unchanged" do
         expect { @survey.record('name' => 'Jacob Harris') }.to change { @survey.tally_for('name', 'Jacob Harris') }.by(1)
       end
+
+      it 'should not record if the value is blank' do
+        expect { @survey.record('name' => '') }.to_not change { Tally.count }
+      end
     end
 
     context 'for an intersection' do
@@ -85,10 +87,6 @@ RSpec.describe Survey, type: :model do
       it 'should count the intersection of both elements' do
         expect(@survey.tally_for('flavor', 'chocolate')).to eq(2)
         expect(@survey.tally_for('flavor|toppings', 'chocolate|sprinkles')).to eq(1)
-      end
-
-      it 'should return the same count if the intersection order is reversed' do
-        expect(@survey.tally_for('toppings|flavor', 'sprinkles|chocolate')).to eq(1)
       end
     end
   end

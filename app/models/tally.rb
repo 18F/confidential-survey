@@ -12,17 +12,24 @@ class Tally < ActiveRecord::Base
     t
   end
 
+  def self.tallies_for(survey_id, field)
+    where(survey_id: survey_id, field: field)
+  end
+  
   def self.tally_for(survey_id, field, value)
     t = where(survey_id: survey_id, field: field, value: value).first
     t.nil? ? 0 : t.count
   end
 
+  def self.total_for(survey_id, field)
+    tallies_for(survey_id, field).sum(:count)
+  end
+  
   def as_json
     fields = field.split('|')
     values = value.split('|')
     
     {
-      intersection: fields.length > 1,
       field: fields.length == 1 ? fields.first : fields,
       value: values.length == 1 ? values.first : values,
       count: count

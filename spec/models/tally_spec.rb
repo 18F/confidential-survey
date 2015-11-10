@@ -47,4 +47,44 @@ RSpec.describe Tally, type: :model do
       end
     end
   end
+
+  describe 'access_methods' do
+    before(:all) do
+      Tally.delete_all
+      @foo1 = Tally.create(survey_id: @survey_id, field: 'foo', value: 'abc', count: 5)
+      @foo2 = Tally.create(survey_id: @survey_id, field: 'foo', value: 'def', count: 2)
+      @bar = Tally.create(survey_id: @survey_id, field: 'bar', value: 'baz', count: 5)
+    end
+    
+    describe 'tally_for' do
+      it 'should return the count if it exists' do
+        expect(Tally.tally_for(@survey_id, 'foo', 'def')).to eq(2)
+      end
+      
+      it 'should return 0 otherwise' do
+        expect(Tally.tally_for(@survey_id, 'foo', 'xyz')).to eq(0)
+      end
+    end
+
+    describe 'tallies_for' do
+      it 'should return all tallies that match the field' do
+        expect(Tally.tallies_for(@survey_id, 'foo')).
+          to contain_exactly(@foo1, @foo2)
+      end
+      
+      it 'should return an empty array if none match' do
+        expect(Tally.tallies_for(@survey_id, 'quux')).to eq([])
+      end
+    end
+
+    describe 'total_for' do
+      it 'should return the totals it there are tallies' do
+        expect(Tally.total_for(@survey_id, 'foo')).to eq(7)
+      end
+      
+      it 'should return 0 otherwise' do
+        expect(Tally.total_for(@survey_id, 'quux')).to eq(0)
+      end
+    end
+  end
 end

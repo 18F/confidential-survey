@@ -68,6 +68,14 @@ class Question
   end
   memoize :choices, :choices_for_form
 
+  def tallies
+    Tally.tallies_for_question(survey_id, key)
+  end
+  
+  def tally_for(value)
+    Tally.tally_for(survey_id, key, value)
+  end
+  
   def freeform?
     question_type == 'freeform'
   end
@@ -108,11 +116,33 @@ class Question
   end
 
   def as_json
+   
+    ch_out = if freeform?
+      tallies.map do |t|
+        {
+          value: t.value,
+          count: t.count
+        }
+      end
+    else
+      choices.map do |value, label|
+        {
+          value: value,
+          display: label,
+          count: tally_for(value)
+        }
+      end
+    end
+
+    if exclusive_combo?
+      ch_out << { value: COMBINATION_VALUE, count: tally_for(COMBINATION_VALUE) }
+    end
+    
     {
       key: key,
       text: text,
       type: question_type,
-      choices: choices
+      choices: ch_out
     }
   end
 end

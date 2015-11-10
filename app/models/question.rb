@@ -69,7 +69,11 @@ class Question
   memoize :choices, :choices_for_form
 
   def tallies
-    Tally.tallies_for_question(survey_id, key)
+    Tally.tallies_for(survey_id, key)
+  end
+
+  def total_responses
+    Tally.total_for(survey_id, key)
   end
   
   def tally_for(value)
@@ -141,6 +145,7 @@ class Question
     {
       key: key,
       text: text,
+      total: total_responses,
       type: question_type,
       choices: ch_out
     }

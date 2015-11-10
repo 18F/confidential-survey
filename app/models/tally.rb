@@ -12,7 +12,7 @@ class Tally < ActiveRecord::Base
     t
   end
 
-  def self.tallies_for_question(survey_id, field)
+  def self.tallies_for(survey_id, field)
     where(survey_id: survey_id, field: field)
   end
   
@@ -21,6 +21,10 @@ class Tally < ActiveRecord::Base
     t.nil? ? 0 : t.count
   end
 
+  def self.total_for(survey_id, field)
+    tallies_for(survey_id, field).sum(:count)
+  end
+  
   def as_json
     fields = field.split('|')
     values = value.split('|')

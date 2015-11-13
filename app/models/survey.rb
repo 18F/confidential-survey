@@ -26,6 +26,8 @@ class Survey
     @hash = IceNine.deep_freeze(hash)
 
     validate_survey
+  rescue Errno::ENOENT
+    raise ActiveRecord::RecordNotFound.new("Survey #{arg} not found")
   end
 
   def title
@@ -34,6 +36,10 @@ class Survey
 
   def description
     @hash['description']
+  end
+
+  def active?
+    !(@hash.key?('active') && @hash['active'] == false)
   end
   
   def survey_id

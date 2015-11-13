@@ -10,7 +10,7 @@ questions:
       - Yes
       - No
       - Sometimes
-      - decline|No Thanks
+      - decline|Decline to Answer
   -
     key: flavor
     text: What is your favorite flavor?

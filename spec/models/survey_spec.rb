@@ -18,6 +18,12 @@ RSpec.describe Survey, type: :model do
       @survey = Survey.new('sample-survey')
     end
 
+    context 'active?' do
+      it 'should return false if the field is not specified' do
+        expect(@survey.active?).to be_truthy
+      end
+    end
+    
     context 'for an exclusive field' do
       it 'should record a tally' do
         expect { @survey.record('ice-cream' => ['yes', '']) }.to change { @survey.tally_for('ice-cream', 'yes') }.by(1)

@@ -25,5 +25,9 @@ class SurveysController < ApplicationController
 
   def load_survey
     @survey = Survey.new(params[:id])
+    fail ActiveRecord::RecordNotFound unless @survey.active?
+
+  rescue ActiveRecord::RecordNotFound
+    render status: 404
   end
 end

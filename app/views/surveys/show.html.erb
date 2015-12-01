@@ -4,9 +4,13 @@
   </div>
 </div>
 
-<div class="usa-grid">
+<div class="usa-grid survey">
 
   <div class="usa-width-one-whole">
+    <div class="intro">
+      <%= raw @md.render(@survey.intro) %>
+    </div>
+
 <%= simple_form_for @survey, url: survey_submit_path(id: @survey.id) do |f| %>
    <%= f.input :id, value: @survey.id, as: :hidden %>
    <%- @survey.questions.each do |question| %>
@@ -21,6 +25,7 @@
          <%- when 'exclusive' %>
          <%= f.input question.key,
              label: question.text,
+             hint: question.hint || '(pick one)',
              as: :radio_buttons,
              required: false,
              collection: question.choices_for_form %>
@@ -28,11 +33,12 @@
          <%= f.input question.key,
              label: question.text,
              as: :check_boxes,
+             hint: question.hint,
              required: false,
              collection: question.choices_for_form,
              input_html: { class: 'usa-unstyled-list' } %>
          <%- when 'freeform' %>
-         <%= f.input question.key, label: question.text, required: false %>
+         <%= f.input question.key, hint: question.hint, label: question.text, required: false %>
          <%- end %>
 
          <%- unless question.description.blank? %>

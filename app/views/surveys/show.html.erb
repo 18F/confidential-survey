@@ -1,4 +1,3 @@
-
   <div class="survey">
 
     <header>
@@ -6,17 +5,9 @@
     </header>
 
     <div class="usa-grid">
-
       <%= simple_form_for @survey, url: survey_submit_path(id: @survey.id) do |f| %>
          <%= f.input :id, value: @survey.id, as: :hidden %>
          <%- @survey.questions.each do |question| %>
-            <% unless question.description.blank? %>
-              <div class="usa-alert usa-alert-info">
-                <div class="usa-alert-body">
-                  <%= raw @md.render(question.description) %>
-                </div>
-              </div>
-           <%- end %>
            <%- case question.question_type %>
                <%- when 'exclusive' %>
                <%= f.input question.key,
@@ -33,16 +24,18 @@
                    input_html: { class: 'usa-unstyled-list' } %>
                <%- when 'freeform' %>
                <%= f.input question.key, label: question.text, required: false %>
-               <%- end %>
+           <%- end %>
 
-               <%- unless question.description.blank? %>
+           <% unless question.description.blank? %>
+             <div class="usa-alert usa-alert-info">
+               <div class="usa-alert-body">
+                 <%= raw @md.render(question.description) %>
+               </div>
+             </div>
+           <%- end %>
+         <%- end %>
 
-               <%- end %>
-          <%- end %>
-
-          <%= f.submit 'Submit Response' %>
+         <%= f.submit 'Submit Response' %>
       <%- end %>
-
     </div>
-
   </div>

@@ -1,45 +1,48 @@
-<div class="usa-grid">
-  <div class="usa-width-one-whole">
-  <h3 class="usa-heading"><%= @survey.title %></h3>
+
+  <div class="survey">
+
+    <header>
+      <h1 class="usa-heading-alt"><%= @survey.title %></h1>
+    </header>
+
+    <div class="usa-grid">
+
+      <%= simple_form_for @survey, url: survey_submit_path(id: @survey.id) do |f| %>
+         <%= f.input :id, value: @survey.id, as: :hidden %>
+         <%- @survey.questions.each do |question| %>
+            <% unless question.description.blank? %>
+              <div class="usa-alert usa-alert-info">
+                <div class="usa-alert-body">
+                  <%= raw @md.render(question.description) %>
+                </div>
+              </div>
+           <%- end %>
+           <%- case question.question_type %>
+               <%- when 'exclusive' %>
+               <%= f.input question.key,
+                   label: question.text,
+                   as: :radio_buttons,
+                   required: false,
+                   collection: question.choices_for_form %>
+               <%- when 'multiple', 'exclusive-combo' %>
+               <%= f.input question.key,
+                   label: question.text,
+                   as: :check_boxes,
+                   required: false,
+                   collection: question.choices_for_form,
+                   input_html: { class: 'usa-unstyled-list' } %>
+               <%- when 'freeform' %>
+               <%= f.input question.key, label: question.text, required: false %>
+               <%- end %>
+
+               <%- unless question.description.blank? %>
+
+               <%- end %>
+          <%- end %>
+
+          <%= f.submit 'Submit Response' %>
+      <%- end %>
+
+    </div>
+
   </div>
-</div>
-
-<div class="usa-grid">
-
-  <div class="usa-width-one-whole">
-<%= simple_form_for @survey, url: survey_submit_path(id: @survey.id) do |f| %>
-   <%= f.input :id, value: @survey.id, as: :hidden %>
-   <%- @survey.questions.each do |question| %>
-      <% unless question.description.blank? %>
-      <div class="usa-alert usa-alert-info">
-        <div class="usa-alert-body">
-          <%= raw @md.render(question.description) %>
-        </div>
-      </div>
-     <%- end %>
-     <%- case question.question_type %>
-         <%- when 'exclusive' %>
-         <%= f.input question.key,
-             label: question.text,
-             as: :radio_buttons,
-             required: false,
-             collection: question.choices_for_form %>
-         <%- when 'multiple', 'exclusive-combo' %>
-         <%= f.input question.key,
-             label: question.text,
-             as: :check_boxes,
-             required: false,
-             collection: question.choices_for_form,
-             input_html: { class: 'usa-unstyled-list' } %>
-         <%- when 'freeform' %>
-         <%= f.input question.key, label: question.text, required: false %>
-         <%- end %>
-
-         <%- unless question.description.blank? %>
-
-         <%- end %>
-    <%- end %>
-
-    <%= f.submit 'Submit Response' %>
-<%- end %>
-</div>

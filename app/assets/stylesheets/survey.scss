@@ -15,20 +15,54 @@ h1 {
   margin: 0;
 }
 
-label {
-  font-weight: 600;
-  padding-bottom: 0.5rem;
-}
+form {
+  margin: 4rem 0 2rem 0;
+  max-width: 100%;
 
-.usa-unstyled-list {
-  padding: 0 0.5rem;
+  fieldset {
+    padding-bottom: 3rem;
+
+    .input {
+      width: 350px;
+      margin-right: 2rem;
+      vertical-align: top;
+      display: inline-block;
+    }
+    .description {
+      width: 350px;
+      border: 1px solid #eee;
+      border-radius: 0.5rem;
+      padding: 1.5rem 2rem;
+      margin-left: 2rem;
+      vertical-align: top;
+      display: inline-block;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
 
   label {
-    margin-top: 1rem;
+    font-weight: 600;
+    margin-top: 0;
+    padding-bottom: 1rem;
   }
-}
 
-form input[type="submit"] {
-  margin-top: 5rem;
+  input[type="text"] {
+    border-radius: 0.3rem;
+  }
+
+  .usa-unstyled-list {
+    padding: 0 0.5rem;
+
+    label {
+      margin-top: 1rem;
+    }
+  }
+
+  form input[type="submit"] {
+    margin-top: 5rem;
+  }
 }
 

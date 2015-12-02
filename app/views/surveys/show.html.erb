@@ -8,34 +8,40 @@
       <%= simple_form_for @survey, url: survey_submit_path(id: @survey.id) do |f| %>
          <%= f.input :id, value: @survey.id, as: :hidden %>
          <%- @survey.questions.each do |question| %>
-           <%- case question.question_type %>
-               <%- when 'exclusive' %>
-               <%= f.input question.key,
-                   label: question.text,
-                   as: :radio_buttons,
-                   required: false,
-                   collection: question.choices_for_form %>
-               <%- when 'multiple', 'exclusive-combo' %>
-               <%= f.input question.key,
-                   label: question.text,
-                   as: :check_boxes,
-                   required: false,
-                   collection: question.choices_for_form,
-                   input_html: { class: 'usa-unstyled-list' } %>
-               <%- when 'freeform' %>
-               <%= f.input question.key, label: question.text, required: false %>
-           <%- end %>
 
-           <% unless question.description.blank? %>
-             <div class="usa-alert usa-alert-info">
-               <div class="usa-alert-body">
+            <fieldset>
+
+             <%- case question.question_type %>
+                 <%- when 'exclusive' %>
+                 <%= f.input question.key,
+                     label: question.text,
+                     as: :radio_buttons,
+                     required: false,
+                     collection: question.choices_for_form %>
+                 <%- when 'multiple', 'exclusive-combo' %>
+                 <%= f.input question.key,
+                     label: question.text,
+                     as: :check_boxes,
+                     required: false,
+                     collection: question.choices_for_form,
+                     input_html: { class: 'usa-unstyled-list' } %>
+                 <%- when 'freeform' %>
+                 <%= f.input question.key, label: question.text, required: false %>
+             <%- end %>
+
+             <% unless question.description.blank? %>
+               <div class="description">
                  <%= raw @md.render(question.description) %>
                </div>
-             </div>
-           <%- end %>
+             <%- end %>
+
+           </fieldset>
+
          <%- end %>
+
 
          <%= f.submit 'Submit Response' %>
       <%- end %>
     </div>
+
   </div>

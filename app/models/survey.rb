@@ -34,6 +34,10 @@ class Survey
     @hash['title']
   end
 
+  def intro
+    @hash['intro']
+  end
+  
   def description
     @hash['description']
   end

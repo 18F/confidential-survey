@@ -1,47 +1,51 @@
-  <div class="survey">
+<div class="survey">
 
-    <header>
-      <h1 class="usa-heading-alt"><%= @survey.title %></h1>
-    </header>
+  <header>
+    <h1 class="usa-heading-alt"><%= @survey.title %></h1>
+  </header>
 
-    <div class="usa-grid">
-      <%= simple_form_for @survey, url: survey_submit_path(id: @survey.id) do |f| %>
-         <%= f.input :id, value: @survey.id, as: :hidden %>
-         <%- @survey.questions.each do |question| %>
+  <div class="intro">
+    <%= raw @md.render(@survey.intro) %>
+  </div>
 
-            <fieldset>
-
-             <%- case question.question_type %>
-                 <%- when 'exclusive' %>
-                 <%= f.input question.key,
-                     label: question.text,
-                     as: :radio_buttons,
-                     required: false,
-                     collection: question.choices_for_form %>
-                 <%- when 'multiple', 'exclusive-combo' %>
-                 <%= f.input question.key,
-                     label: question.text,
-                     as: :check_boxes,
-                     required: false,
-                     collection: question.choices_for_form,
-                     input_html: { class: 'usa-unstyled-list' } %>
-                 <%- when 'freeform' %>
-                 <%= f.input question.key, label: question.text, required: false %>
-             <%- end %>
-
-             <% unless question.description.blank? %>
-               <div class="description">
-                 <%= raw @md.render(question.description) %>
-               </div>
-             <%- end %>
-
-           </fieldset>
-
+  <div class="usa-grid">
+    <%= simple_form_for @survey, url: survey_submit_path(id: @survey.id) do |f| %>
+    <%= f.input :id, value: @survey.id, as: :hidden %>
+    <%- @survey.questions.each do |question| %>
+      <fieldset>
+        <%- case question.question_type %>
+          <%- when 'exclusive' %>
+            <%= f.input question.key,
+                label: question.text,
+                hint: question.hint || '(pick one)',
+                as: :radio_buttons,
+                required: false,
+                collection: question.choices_for_form %>
+          <%- when 'multiple', 'exclusive-combo' %>
+            <%= f.input question.key,
+                label: question.text,
+                as: :check_boxes,
+                hint: question.hint,
+                required: false,
+                collection: question.choices_for_form,
+                input_html: { class: 'usa-unstyled-list' } %>
+          <%- when 'freeform' %>
+            <%= f.input question.key,
+                hint: question.hint,
+                label: question.text,
+                required: false %>
          <%- end %>
 
+       <%- unless question.description.blank? %>
+         <div class="description">
+           <%= raw @md.render(question.description) %>
+         </div>
+       <%- end %>
+      </fieldset>
 
-         <%= f.submit 'Submit Response' %>
       <%- end %>
-    </div>
 
+      <%= f.submit 'Submit Response' %>
+    <%- end %>
   </div>
+</div>

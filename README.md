@@ -1,4 +1,4 @@
-# Confidential Survey (v 0.0.5)
+# Confidential Survey (v 0.0.6)
 
 This is a prototype application for gathering responses from
 confidential surveys in a way that doesn't result in a large table of
@@ -8,6 +8,8 @@ The basic idea is to not store individual form responses as records,
 but to instead use the submission to increment the appropriate
 counters. This allows to derive the statistics we want to ultimately
 measure without assembling a large database of individual responses.
+
+[This diagram illustrates the difference from a traditional survey.](doc/how-the-survey-works.pdf)
 
 So, if we had a survey on ice cream and we wanted to ask employees:
 - Do you like ice cream? (Yes/No/Prefer Not To Answer)

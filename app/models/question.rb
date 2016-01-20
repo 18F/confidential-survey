@@ -20,6 +20,10 @@ class Question
     @hash['text']
   end
 
+  def hint
+    @hash['hint']
+  end
+  
   def description
     @hash['description']
   end

@@ -2,18 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Survey, type: :model do
   describe 'record' do
-    #########################################################
-    # let(:responses) do                                    #
-    #   {                                                   #
-    #     'ice-cream' => ['yes', ''],                       #
-    #     'favorite-flavor' => ['chocolate'],               #
-    #     'favorite-toppings' => ['brownies', 'sprinkles'], #
-    #     'desserts' => ['cupcakes', 'cake', 'candy', ''],  #
-    #     'name' => ['This is a test']                      #
-    #   }                                                   #
-    # end                                                   #
-    #########################################################
-    
     before(:all) do
       @survey = Survey.new('sample-survey')
     end
@@ -23,13 +11,13 @@ RSpec.describe Survey, type: :model do
         expect(@survey.active?).to be_truthy
       end
     end
-    
+
     context 'for an exclusive field' do
       it 'should record a tally' do
         expect { @survey.record('ice-cream' => ['yes', '']) }.to change { @survey.tally_for('ice-cream', 'yes') }.by(1)
         expect(Tally.where(value: '').count).to eq(0)
       end
-      
+
       it 'should raise an error if it gets multiple valid choices' do
         expect { @survey.record('ice-cream' => ['yes', 'no']) }.to raise_error(RuntimeError)
       end
@@ -46,7 +34,7 @@ RSpec.describe Survey, type: :model do
       end
 
       context 'when the user selects multiple values' do
-        subject { @survey.record('flavor' => ['chocolate', 'vanilla']) } 
+        subject { @survey.record('flavor' => ['chocolate', 'vanilla']) }
 
         it 'should not record counts for those values' do
           expect { subject }.to_not change { @survey.tally_for('flavor', 'vanilla') }
@@ -89,7 +77,7 @@ RSpec.describe Survey, type: :model do
         @survey.record('flavor' => ['chocolate'], 'toppings' => ['sprinkles', 'hot-fudge'])
         @survey.record('flavor' => ['chocolate'], 'toppings' => ['hot-fudge'])
       end
-      
+
       it 'should count the intersection of both elements' do
         expect(@survey.tally_for('flavor', 'chocolate')).to eq(2)
         expect(@survey.tally_for('flavor|toppings', 'chocolate|sprinkles')).to eq(1)

@@ -34,6 +34,19 @@ class Survey
     @hash['title']
   end
 
+  def intro
+    if @intro.nil?
+      @intro = @hash['intro']
+
+      # load a markdown file if specified
+      if @intro =~ /\.md$/
+        @intro = File.read(Rails.root.join('config', 'surveys', @intro))
+      end
+    end
+
+    @intro
+  end
+  
   def description
     @hash['description']
   end

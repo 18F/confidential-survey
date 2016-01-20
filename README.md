@@ -1,4 +1,4 @@
-# Confidential Survey (v 0.0.5)
+# Confidential Survey (v 0.0.6)
 
 This is a prototype application for gathering responses from
 confidential surveys in a way that doesn't result in a large table of

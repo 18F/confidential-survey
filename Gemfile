@@ -66,6 +66,7 @@ group :development, :test do
   gem 'i18n-tasks'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.3.0'
+  gem 'brakeman', require: false
 end
 
 group :test do

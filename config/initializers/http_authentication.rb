@@ -1,4 +1,4 @@
-unless Rails.env.development?
+unless Rails.env.development? || Rails.env.test?
   $auth_name = ENV['HTTP_AUTH_NAME']
   $auth_password = ENV['HTTP_AUTH_PASSWORD']
 

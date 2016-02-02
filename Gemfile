@@ -67,6 +67,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.3.0'
   gem 'brakeman', require: false
+  gem 'hakiri'
 end
 
 group :test do

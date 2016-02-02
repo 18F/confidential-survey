@@ -1,0 +1,7 @@
+{
+    "linux-kernel": { "command": "", "version": "" },
+    "postgres": { "command": "", "version": "" },
+    "ruby": { "command": "", "version": "" },
+    "ruby-on-rails": { "command": "", "version": "" },
+    "unicorn": { "command": "", "version": "" }
+}

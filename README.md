@@ -1,3 +1,5 @@
+[![Dependency Status](https://gemnasium.com/18F/confidential-survey.svg)](https://gemnasium.com/18F/confidential-survey)
+
 # Confidential Survey (v 0.0.8)
 
 This is a prototype application for gathering responses from

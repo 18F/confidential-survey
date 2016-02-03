@@ -1,4 +1,4 @@
-[![Dependency Status](https://gemnasium.com/18F/confidential-survey.svg)](https://gemnasium.com/18F/confidential-survey) [![security](https://hakiri.io/github/18F/confidential-survey/develop.svg)](https://hakiri.io/github/18F/confidential-survey/develop) [![Build Status](https://travis-ci.org/18F/confidential-survey.svg?branch=master)](https://travis-ci.org/18F/confidential-survey)
+[![Code Climate](https://codeclimate.com/github/18F/confidential-survey/badges/gpa.svg)](https://codeclimate.com/github/18F/confidential-survey) [![Test Coverage](https://codeclimate.com/github/18F/confidential-survey/badges/coverage.svg)](https://codeclimate.com/github/18F/confidential-survey/coverage) [![Dependency Status](https://gemnasium.com/18F/confidential-survey.svg)](https://gemnasium.com/18F/confidential-survey) [![security](https://hakiri.io/github/18F/confidential-survey/develop.svg)](https://hakiri.io/github/18F/confidential-survey/develop) [![Build Status](https://travis-ci.org/18F/confidential-survey.svg?branch=master)](https://travis-ci.org/18F/confidential-survey)
 
 # Confidential Survey (v 0.0.8)
 

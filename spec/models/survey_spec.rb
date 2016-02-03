@@ -19,7 +19,7 @@ RSpec.describe Survey, type: :model do
       end
 
       it 'should raise an error if it gets multiple valid choices' do
-        expect { @survey.record('ice-cream' => ['yes', 'no']) }.to raise_error(RuntimeError)
+        expect { @survey.record('ice-cream' => %w(yes no)) }.to raise_error(RuntimeError)
       end
 
       # one day
@@ -34,7 +34,7 @@ RSpec.describe Survey, type: :model do
       end
 
       context 'when the user selects multiple values' do
-        subject { @survey.record('flavor' => ['chocolate', 'vanilla']) }
+        subject { @survey.record('flavor' => %w(chocolate vanilla)) }
 
         it 'should not record counts for those values' do
           expect { subject }.to_not change { @survey.tally_for('flavor', 'vanilla') }
@@ -42,13 +42,14 @@ RSpec.describe Survey, type: :model do
         end
 
         it 'should record a "combination" value in the tally' do
-          expect { subject }.to change { @survey.tally_for('flavor', Question::COMBINATION_VALUE) }.by(1)
+          expect { subject }.
+            to change { @survey.tally_for('flavor', Question::COMBINATION_VALUE) }.by(1)
         end
       end
     end
 
     context 'for a true multiple field' do
-      subject { @survey.record('desserts' => ['cake', 'cookies']) }
+      subject { @survey.record('desserts' => %w(cake cookies)) }
 
       it 'should update the tally for each value' do
         c_cookies = @survey.tally_for('desserts', 'cookies')
@@ -57,13 +58,15 @@ RSpec.describe Survey, type: :model do
       end
 
       it 'should not update the tally for the combined value' do
-        expect { subject }.to_not change { @survey.tally_for('desserts', Question::COMBINATION_VALUE) }
+        expect { subject }.
+          to_not change { @survey.tally_for('desserts', Question::COMBINATION_VALUE) }
       end
     end
 
     context 'for a freeform field' do
-      it "should record the field unchanged" do
-        expect { @survey.record('name' => 'Jacob Harris') }.to change { @survey.tally_for('name', 'Jacob Harris') }.by(1)
+      it 'should record the field unchanged' do
+        expect { @survey.record('name' => 'Jacob Harris') }.
+          to change { @survey.tally_for('name', 'Jacob Harris') }.by(1)
       end
 
       it 'should not record if the value is blank' do

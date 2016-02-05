@@ -261,6 +261,8 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    session_off (0.5.1)
+      actionpack (>= 2.3)
     sexp_processor (4.6.1)
     shoulda-matchers (3.1.1)
       activesupport (>= 4.0.0)
@@ -363,6 +365,7 @@ DEPENDENCIES
   rspec-rails (~> 3.3.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
+  session_off
   shoulda-matchers
   silencer
   simple_form
@@ -381,4 +384,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

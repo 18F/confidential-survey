@@ -80,6 +80,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'timecop'
   gem 'webmock'
+  gem 'codeclimate-test-reporter', require: nil
 end
 
 group :staging, :production do

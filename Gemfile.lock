@@ -372,7 +372,6 @@ DEPENDENCIES
   shoulda-matchers
   silencer
   simple_form
-  simplecov
   spring
   spring-commands-rspec
   sqlite3

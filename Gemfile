@@ -78,7 +78,6 @@ group :test do
   gem 'launchy'
   gem 'shoulda-matchers'
   gem 'timecop'
-  gem 'webmock'
   gem 'codeclimate-test-reporter', require: nil
 end
 

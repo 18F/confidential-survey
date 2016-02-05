@@ -1,0 +1,10 @@
+language: ruby
+before_script:
+- bundle exec rake db:create
+- bundle exec rake db:migrate
+script: bundle exec rake spec
+addons:
+  postgresql: '9.3'
+  code_climate:
+        repo_token: 52f5dae8238ac57a4a8a34d837207713bb43b6b578eabf4633462ddfa5dc14d1
+edge: true

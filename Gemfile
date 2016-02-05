@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.2.3'
+ruby '2.3.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5.1'
@@ -43,6 +43,7 @@ gem 'ice_nine'
 gem 'memoist'
 gem 'redcarpet'
 gem 'silencer'
+gem 'session_off'
 
 group :production do
   gem 'rails_12factor'
@@ -67,6 +68,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.3.0'
   gem 'brakeman', require: false
+  gem 'hakiri'
 end
 
 group :test do

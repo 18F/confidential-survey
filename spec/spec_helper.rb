@@ -16,10 +16,8 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-if ENV.fetch("COVERAGE", false)
-  require "simplecov"
-  SimpleCov.start "rails"
-end
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

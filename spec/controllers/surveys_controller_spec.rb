@@ -17,12 +17,22 @@ RSpec.describe SurveysController, type: :controller do
         get :show, id: 'sample-survey'
         expect(assigns(:md)).to_not be_nil
       end
+
+      it 'should not set a session cookie' do
+        get :show, id: 'sample-survey'
+        expect(session).to be_empty
+      end
     end
 
     context 'for a nonexistant survey' do
       it 'should return a 404' do
         get :show, id: 'blah'
         expect(response).to have_http_status(:not_found)
+      end
+
+      it 'should not set a session cookie' do
+        get :show, id: 'blah'
+        expect(session).to be_empty
       end
     end
 
@@ -31,6 +41,11 @@ RSpec.describe SurveysController, type: :controller do
         expect_any_instance_of(Survey).to receive(:active?).and_return(false)
         get :show, id: 'sample-survey'
         expect(response).to have_http_status(:not_found)
+      end
+
+      it 'should not set a session cookie' do
+        get :show, id: 'sample-survey'
+        expect(session).to be_empty
       end
     end
 
@@ -45,6 +60,11 @@ RSpec.describe SurveysController, type: :controller do
         expect_any_instance_of(Survey).to receive(:active?).and_return(false)
         get :show, id: 'sample-survey', format: 'json'
         expect(response).to have_http_status(:not_found)
+      end
+
+      it 'should not set a session cookie' do
+        get :show, id: 'sample-survey', format: 'json'
+        expect(session).to be_empty
       end
     end
   end

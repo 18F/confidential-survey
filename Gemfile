@@ -43,6 +43,7 @@ gem 'ice_nine'
 gem 'memoist'
 gem 'redcarpet'
 gem 'silencer'
+gem 'session_off'
 
 group :production do
   gem 'rails_12factor'

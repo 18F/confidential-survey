@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.feature 'user takes survey', type: :feature do
   scenario 'submitting a survey' do
@@ -18,11 +18,13 @@ RSpec.feature 'user takes survey', type: :feature do
     click_on('Submit')
 
     # Check that we have responses
+    # rubocop:disable Style/WordArray
     [['ice-cream', 'yes'], ['flavor', 'combination'],
      ['toppings', 'sprinkles'], ['toppings', 'brownies'],
      ['desserts', 'cake'], ['name', 'Blue Bell']].each do |key, value|
       expect(Tally.tally_for('sample-survey', key, value)).to eq(1)
     end
+    # rubocop:enable Style/WordArray
 
     expect(page).to have_content('Thank you for participating in this survey')
   end

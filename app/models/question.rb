@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'memoist'
 
 # This is not backed to the database, but just initialized by loading the form
@@ -43,13 +44,12 @@ class Question
     out
   end
 
+  # rubocop:disable Metrics/MethodLength
   def choices_for_form
     return nil if freeform?
     out = {}
-
     @hash['values'].each do |v|
       key, label = nil
-
       case v
       when String
         key, label = v.split('|', 2)
@@ -64,12 +64,12 @@ class Question
         key = 'no'
         label = 'No'
       end
-
       out[label] = key
     end
-
     out
   end
+  # rubocop:enable Metrics/MethodLength
+
   memoize :choices, :choices_for_form
 
   def tallies
@@ -100,6 +100,7 @@ class Question
     question_type == 'multiple'
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def response_pairs(responses)
     responses = [responses] unless responses.is_a?(Array)
     responses = responses.reject(&:blank?)
@@ -122,18 +123,20 @@ class Question
       end
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # FIXME: move to Serializer
+  # rubocop:disable Metrics/MethodLength
   def as_json
-    ch_out = if freeform?
-               tallies.map do |t|
+    if freeform?
+      ch_out = tallies.map do |t|
         {
           value: t.value,
           count: t.count
         }
       end
     else
-      choices.map do |value, label|
+      ch_out = choices.map do |value, label|
         {
           value: value,
           display: label,
@@ -154,4 +157,5 @@ class Question
       choices: ch_out
     }
   end
+  # rubocop:enable Metrics/MethodLength
 end

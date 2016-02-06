@@ -15,8 +15,7 @@ class Survey
   def initialize(arg)
     hash = case arg
            when String
-             YAML.load(File.open(Rails.root.join('config', 'surveys', "#{arg}.yml"))).
-               merge({'id' => arg})
+             YAML.load(File.open(Rails.root.join('config', 'surveys', "#{arg}.yml"))).merge('id' => arg)
            when Hash
              arg
            else
@@ -27,7 +26,7 @@ class Survey
 
     validate_survey
   rescue Errno::ENOENT
-    fail ActiveRecord::RecordNotFound.new("Survey #{arg} not found")
+    raise ActiveRecord::RecordNotFound, "Survey #{arg} not found"
   end
 
   def title
@@ -56,13 +55,13 @@ class Survey
   end
 
   def survey_id
-    @hash[:id]
+    @hash['id']
   end
-  alias_method :id, :survey_id
+  alias id survey_id
 
   def questions
     if @questions.nil?
-      @questions = @hash['questions'].map {|h| Question.new(survey_id, h)}
+      @questions = @hash['questions'].map {|h| Question.new(survey_id, h) }
     end
 
     @questions
@@ -72,12 +71,12 @@ class Survey
     @hash['intersections']
   end
 
-  def record(responses)
+  def record_answers(responses)
     pending = {}
 
     responses.each do |key, answers|
       next if key == 'id'
-      q = questions.detect { |q| q.key == key }
+      q = questions.detect {|x| x.key == key }
       fail "Question #{key} not found" if q.nil?
 
       q.response_pairs(answers).each do |pair|
@@ -93,13 +92,19 @@ class Survey
       end
     end
 
+    pending
+  end
+
+  def record_intersections(pending)
     # now compute the intersection tallies
     intersections.each do |fields|
       key = fields.join('|')
-      all_values = fields.map { |f| pending[f] }
+      all_values = fields.map {|f| pending[f] }
 
       # Skip if any field in the intersection is a nil
-      next if all_values.any? { |a| a.nil? }
+      # rubocop:disable Style/SymbolProc
+      next if all_values.any? {|x| x.nil? }
+      # rubocop:enable Style/SymbolProc
 
       # do a Cartesian Product of all combos of each element in each array
       cp = all_values.reduce(&:product).map(&:flatten)
@@ -108,6 +113,11 @@ class Survey
         Tally.record(survey_id, key, arr.flatten.join('|'))
       end
     end
+  end
+
+  def record(responses)
+    pending = record_answers(responses)
+    record_intersections(pending)
   end
 
   def tally_for(field, value)
@@ -123,7 +133,7 @@ class Survey
       id: survey_id,
       title: title,
       description: description,
-      questions: questions.map {|q| q.as_json },
+      questions: questions.map(&:as_json),
       intersections: intersections.map do |fields|
         {
           fields: fields,

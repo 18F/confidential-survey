@@ -42,7 +42,7 @@ RSpec.describe Tally, type: :model do
       end
 
       it 'should increment the count for that field/value pair' do
-        expect{ Tally.record(@survey_id, 'foo', 'bar') }.
+        expect { Tally.record(@survey_id, 'foo', 'bar') }.
           to change { Tally.tally_for(@survey_id, 'foo', 'bar') }.by(1)
       end
 

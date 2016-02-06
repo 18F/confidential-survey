@@ -29,7 +29,8 @@ RSpec.describe Survey, type: :model do
     context 'for a exclusive-combo field' do
       context 'when the user selects one value' do
         it 'should record that field value in the tally' do
-          expect { @survey.record('flavor' => ['chocolate']) }.to change { @survey.tally_for('flavor', 'chocolate') }.by(1)
+          expect { @survey.record('flavor' => ['chocolate']) }.
+            to change { @survey.tally_for('flavor', 'chocolate') }.by(1)
         end
       end
 

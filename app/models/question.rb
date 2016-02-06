@@ -1,13 +1,14 @@
+# frozen_string_literal: true
 require 'memoist'
 
 # This is not backed to the database, but just initialized by loading the form
 class Question
   extend Memoist
   attr_reader :survey_id
-  
-  COMBINATION_VALUE = 'combination'
 
-  def initialize(survey_id, hash={})
+  COMBINATION_VALUE = 'combination'.freeze
+
+  def initialize(survey_id, hash = {})
     @survey_id = survey_id
     @hash = hash.dup.freeze
   end
@@ -15,7 +16,7 @@ class Question
   def key
     @hash['key']
   end
-  
+
   def text
     @hash['text']
   end
@@ -23,7 +24,7 @@ class Question
   def hint
     @hash['hint']
   end
-  
+
   def description
     @hash['description']
   end
@@ -43,16 +44,15 @@ class Question
     out
   end
 
+  # rubocop:disable Metrics/MethodLength
   def choices_for_form
     return nil if freeform?
     out = {}
-
     @hash['values'].each do |v|
       key, label = nil
-
       case v
       when String
-        key, label = v.split("|", 2)
+        key, label = v.split('|', 2)
         if label.nil?
           label = key
           key = label.parameterize
@@ -64,12 +64,12 @@ class Question
         key = 'no'
         label = 'No'
       end
-
       out[label] = key
     end
-
     out
   end
+  # rubocop:enable Metrics/MethodLength
+
   memoize :choices, :choices_for_form
 
   def tallies
@@ -79,11 +79,11 @@ class Question
   def total_responses
     Tally.total_for(survey_id, key)
   end
-  
+
   def tally_for(value)
     Tally.tally_for(survey_id, key, value)
   end
-  
+
   def freeform?
     question_type == 'freeform'
   end
@@ -100,15 +100,16 @@ class Question
     question_type == 'multiple'
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def response_pairs(responses)
     responses = [responses] unless responses.is_a?(Array)
-    responses = responses.reject {|r| r.blank? }
+    responses = responses.reject(&:blank?)
 
     case
     when freeform?
       [[key, responses.first]]
     when exclusive?
-      raise 'Multiple responses for an exclusive question' if responses.length > 1
+      fail 'Multiple responses for an exclusive question' if responses.length > 1
       [[key, responses.first]]
     when exclusive_combo?
       if responses.length > 1
@@ -122,18 +123,20 @@ class Question
       end
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
+  # FIXME: move to Serializer
+  # rubocop:disable Metrics/MethodLength
   def as_json
-   
-    ch_out = if freeform?
-      tallies.map do |t|
+    if freeform?
+      ch_out = tallies.map do |t|
         {
           value: t.value,
           count: t.count
         }
       end
     else
-      choices.map do |value, label|
+      ch_out = choices.map do |value, label|
         {
           value: value,
           display: label,
@@ -143,9 +146,9 @@ class Question
     end
 
     if exclusive_combo?
-      ch_out << { value: COMBINATION_VALUE, count: tally_for(COMBINATION_VALUE) }
+      ch_out << {value: COMBINATION_VALUE, count: tally_for(COMBINATION_VALUE)}
     end
-    
+
     {
       key: key,
       text: text,
@@ -154,4 +157,5 @@ class Question
       choices: ch_out
     }
   end
+  # rubocop:enable Metrics/MethodLength
 end

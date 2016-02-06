@@ -15,19 +15,18 @@ class Survey
   def initialize(arg)
     hash = case arg
            when String
-             YAML.load(File.open(Rails.root.join('config', 'surveys', "#{arg}.yml")))
-               .merge({'id': arg}) 
+             YAML.load(File.open(Rails.root.join('config', 'surveys', "#{arg}.yml"))).merge('id' => arg)
            when Hash
              arg
            else
              fail 'Not implemented yet'
            end
-    
+
     @hash = IceNine.deep_freeze(hash)
 
     validate_survey
   rescue Errno::ENOENT
-    raise ActiveRecord::RecordNotFound.new("Survey #{arg} not found")
+    raise ActiveRecord::RecordNotFound, "Survey #{arg} not found"
   end
 
   def title
@@ -46,7 +45,7 @@ class Survey
 
     @intro
   end
-  
+
   def description
     @hash['description']
   end
@@ -54,15 +53,15 @@ class Survey
   def active?
     !(@hash.key?('active') && @hash['active'] == false)
   end
-  
+
   def survey_id
-    @hash[:id]
+    @hash['id']
   end
-  alias_method :id, :survey_id
+  alias id survey_id
 
   def questions
     if @questions.nil?
-      @questions = @hash['questions'].map { |h| Question.new(survey_id, h) }
+      @questions = @hash['questions'].map {|h| Question.new(survey_id, h) }
     end
 
     @questions
@@ -71,15 +70,15 @@ class Survey
   def intersections
     @hash['intersections']
   end
-  
-  def record(responses)
+
+  def record_answers(responses)
     pending = {}
 
     responses.each do |key, answers|
       next if key == 'id'
-      q = questions.detect { |q| q.key == key }
+      q = questions.detect {|x| x.key == key }
       fail "Question #{key} not found" if q.nil?
-      
+
       q.response_pairs(answers).each do |pair|
         pending[pair.first] ||= []
         pending[pair.first] << pair.last
@@ -93,13 +92,19 @@ class Survey
       end
     end
 
+    pending
+  end
+
+  def record_intersections(pending)
     # now compute the intersection tallies
     intersections.each do |fields|
       key = fields.join('|')
-      all_values = fields.map { |f| pending[f] }
+      all_values = fields.map {|f| pending[f] }
 
       # Skip if any field in the intersection is a nil
-      next if all_values.any? { |a| a.nil? }
+      # rubocop:disable Style/SymbolProc
+      next if all_values.any? {|x| x.nil? }
+      # rubocop:enable Style/SymbolProc
 
       # do a Cartesian Product of all combos of each element in each array
       cp = all_values.reduce(&:product).map(&:flatten)
@@ -110,6 +115,11 @@ class Survey
     end
   end
 
+  def record(responses)
+    pending = record_answers(responses)
+    record_intersections(pending)
+  end
+
   def tally_for(field, value)
     Tally.tally_for(survey_id, field, value)
   end
@@ -117,13 +127,13 @@ class Survey
   def tallies(field)
     Tally.where(survey_id: survey_id, field: field)
   end
-  
+
   def as_json
     {
       id: survey_id,
       title: title,
       description: description,
-      questions: questions.map { |q| q.as_json },
+      questions: questions.map(&:as_json),
       intersections: intersections.map do |fields|
         {
           fields: fields,
@@ -132,18 +142,18 @@ class Survey
               values: t.value.split('|'),
               count: t.count
             }
-          end          
+          end
         }
       end
     }
   end
-  
+
   private
 
   def validate_survey
     fail 'You must include an id field in the survey' if survey_id.blank?
   end
-  
+
   def method_missing(method_sym, *arguments, &block)
     if @hash['questions'].any? {|h| h['key'] == method_sym.to_s }
       nil

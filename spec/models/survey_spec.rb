@@ -44,7 +44,7 @@ RSpec.describe Survey, type: :model do
 
         it 'should record a "combination" value in the tally' do
           expect { subject }.
-            to change { @survey.tally_for('flavor', Question::COMBINATION_VALUE) }.by(1)
+            to change { @survey.tally_for('flavor', Choice::COMBINATION_VALUE) }.by(1)
         end
       end
     end
@@ -60,7 +60,7 @@ RSpec.describe Survey, type: :model do
 
       it 'should not update the tally for the combined value' do
         expect { subject }.
-          to_not change { @survey.tally_for('desserts', Question::COMBINATION_VALUE) }
+          to_not change { @survey.tally_for('desserts', Choice::COMBINATION_VALUE) }
       end
     end
 

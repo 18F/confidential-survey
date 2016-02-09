@@ -1,12 +1,9 @@
-# frozen_string_literal: true
 require 'memoist'
 
 # This is not backed to the database, but just initialized by loading the form
 class Question
   extend Memoist
   attr_reader :survey_id
-
-  COMBINATION_VALUE = 'combination'.freeze
 
   def initialize(survey_id, hash = {})
     @survey_id = survey_id
@@ -35,40 +32,19 @@ class Question
 
   def choices
     return nil if freeform?
-
-    out = {}
-    choices_for_form.each do |label, key|
-      out[key] = label
-    end
-
-    out
+    @hash['values'].map {|v| Choice.new(self, v) }
   end
 
-  # rubocop:disable Metrics/MethodLength
   def choices_for_form
     return nil if freeform?
+
     out = {}
-    @hash['values'].each do |v|
-      key, label = nil
-      case v
-      when String
-        key, label = v.split('|', 2)
-        if label.nil?
-          label = key
-          key = label.parameterize
-        end
-      when true
-        key = 'yes'
-        label = 'Yes'
-      when false
-        key = 'no'
-        label = 'No'
-      end
-      out[label] = key
+    choices.each do |c|
+      out[c.label] = c.value
     end
+
     out
   end
-  # rubocop:enable Metrics/MethodLength
 
   memoize :choices, :choices_for_form
 
@@ -78,10 +54,6 @@ class Question
 
   def total_responses
     Tally.total_for(survey_id, key)
-  end
-
-  def tally_for(value)
-    Tally.tally_for(survey_id, key, value)
   end
 
   def freeform?
@@ -113,7 +85,7 @@ class Question
       [[key, responses.first]]
     when exclusive_combo?
       if responses.length > 1
-        [[key, COMBINATION_VALUE]]
+        [[key, Choice::COMBINATION_VALUE]]
       else
         [[key, responses.first]]
       end
@@ -126,27 +98,12 @@ class Question
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # FIXME: move to Serializer
-  # rubocop:disable Metrics/MethodLength
   def as_json
     if freeform?
-      ch_out = tallies.map do |t|
-        {
-          value: t.value,
-          count: t.count
-        }
-      end
+      ch_out = freeform_tallies_json
     else
-      ch_out = choices.map do |value, label|
-        {
-          value: value,
-          display: label,
-          count: tally_for(value)
-        }
-      end
-    end
-
-    if exclusive_combo?
-      ch_out << {value: COMBINATION_VALUE, count: tally_for(COMBINATION_VALUE)}
+      ch_out = choices.map(&:as_json)
+      ch_out << Choice.combination(self).as_json if exclusive_combo?
     end
 
     {
@@ -157,5 +114,16 @@ class Question
       choices: ch_out
     }
   end
-  # rubocop:enable Metrics/MethodLength
+
+  private
+
+  def freeform_tallies_json
+    tallies.map do |t|
+      {
+        value: t.value,
+        count: t.count
+      }
+    end
+  end
+
 end

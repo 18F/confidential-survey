@@ -8,7 +8,7 @@ RSpec.feature 'user takes survey', type: :feature do
     expect(page).to have_content('This is a sample survey to see how much you really love ice cream.')
 
     choose('Yes')
-    check('Chocolate')
+    check('Strawberry')
     check('Vanilla')
     check('Sprinkles')
     check('Brownies')

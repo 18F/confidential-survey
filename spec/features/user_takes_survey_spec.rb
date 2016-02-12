@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'user takes survey', type: :feature do
   scenario 'submitting a survey' do
+    Tally.delete_all
     visit '/surveys/sample-survey'
 
     expect(page).to have_content('Ice Cream Survey')
@@ -22,7 +23,9 @@ RSpec.feature 'user takes survey', type: :feature do
     [['ice-cream', 'yes'], ['flavor', 'combination'],
      ['toppings', 'sprinkles'], ['toppings', 'brownies'],
      ['desserts', 'cake'], ['name', 'Blue Bell']].each do |key, value|
-      expect(Tally.tally_for('sample-survey', key, value)).to eq(1)
+      count = Tally.tally_for('sample-survey', key, value)
+      #puts "#{key} #{value}: #{count}"
+      expect(count).to eq(1)
     end
     # rubocop:enable Style/WordArray
 

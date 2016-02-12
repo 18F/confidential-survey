@@ -61,16 +61,20 @@ class Survey
 
   def questions
     if @questions.nil?
-      @questions = @hash['questions'].map {|h| Question.new(survey_id, h) }
+      @questions = @hash['questions'].map {|h| Question.new(self, h) }
     end
 
     @questions
   end
 
   def intersections
-    @hash['intersections']
-  end
+    if @intersections.nil?
+      @intersections = @hash['intersections'].map {|h| Intersection.new(self, h) }
+    end
 
+    @intersections
+  end
+    
   def record_answers(responses)
     pending = {}
 
@@ -97,9 +101,9 @@ class Survey
 
   def record_intersections(pending)
     # now compute the intersection tallies
-    intersections.each do |fields|
-      key = fields.join('|')
-      all_values = fields.map {|f| pending[f] }
+    intersections.each do |intersection|
+      key = intersection.tally_key
+      all_values = intersection.keys.map {|f| pending[f] }
 
       # Skip if any field in the intersection is a nil
       # rubocop:disable Style/SymbolProc
@@ -134,10 +138,10 @@ class Survey
       title: title,
       description: description,
       questions: questions.map(&:as_json),
-      intersections: intersections.map do |fields|
+      intersections: intersections.map do |intersection|
         {
-          fields: fields,
-          choices: tallies(fields.join('|')).map do |t|
+          fields: intersection.keys,
+          choices: tallies(intersection.tally_key).map do |t|
             {
               values: t.value.split('|'),
               count: t.count

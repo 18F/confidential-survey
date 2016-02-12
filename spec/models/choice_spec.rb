@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Choice do
   describe 'initialize' do
-    let(:question) { Question.new('ice-cream', key: 'flavor') }
+    let(:survey) { double('Survey', survey_id: 'ice-cream') }
+    let(:question) { Question.new(survey, key: 'flavor') }
 
     it 'should split a string into value and label' do
       c = Choice.new(question, 'chocolate|Chocolate')

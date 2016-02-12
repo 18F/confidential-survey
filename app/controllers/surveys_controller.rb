@@ -5,7 +5,7 @@ class SurveysController < ApplicationController
   def show
     respond_to do |format|
       format.html { @md = Redcarpet::Markdown.new(Redcarpet::Render::HTML) }
-      format.json { render json: @survey.as_json }
+      format.json { render json: Serializers::Survey.new(@survey).as_json }
     end
   end
 

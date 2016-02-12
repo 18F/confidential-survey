@@ -84,26 +84,6 @@ class Survey
     Tally.where(survey_id: survey_id, field: field)
   end
 
-  def as_json
-    {
-      id: survey_id,
-      title: title,
-      description: description,
-      questions: questions.map(&:as_json),
-      intersections: intersections.map do |intersection|
-        {
-          fields: intersection.keys,
-          choices: tallies(intersection.tally_key).map do |t|
-            {
-              values: t.value.split('|'),
-              count: t.count
-            }
-          end
-        }
-      end
-    }
-  end
-
   private
 
   def validate_survey

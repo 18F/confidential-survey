@@ -39,7 +39,7 @@ class Choice
   end
 
   def count
-    tally_for(label)
+    tally_for(value)
   end
 
   def as_json

@@ -3,10 +3,10 @@ require 'memoist'
 # This is not backed to the database, but just initialized by loading the form
 class Question
   extend Memoist
-  attr_reader :survey_id
+  attr_reader :survey
 
-  def initialize(survey_id, hash = {})
-    @survey_id = survey_id
+  def initialize(survey, hash = {})
+    @survey = survey
     @hash = hash.dup.freeze
   end
 
@@ -30,9 +30,18 @@ class Question
     @hash['type']
   end
 
+  def survey_id
+    @survey.survey_id
+  end
+
   def choices
     return nil if freeform?
-    @hash['values'].map {|v| Choice.new(self, v) }
+
+    if @choices.nil?
+      @choices = @hash['values'].map {|v| Choice.new(self, v) }
+    end
+
+    @choices
   end
 
   def choices_for_form

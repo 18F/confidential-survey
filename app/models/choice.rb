@@ -3,27 +3,37 @@ class Choice
   attr_reader :question, :value, :label
 
   COMBINATION_VALUE = 'combination'.freeze
-
-  def initialize(question, str)
+  COMBINATION_LABEL = 'Combination'.freeze
+  
+  def initialize(question, value, label=nil)
     @question = question
 
-    # YAML translates these to booleans
-    if str == true
-      str = 'Yes'
-    elsif str == false
-      str = 'No'
+    unless label.nil?
+      @value = value
+      @label = label
+    else
+      initialize_from_split(question, value)
     end
-
-    @value, @label = str.split('|', 2)
-
+  end
+  
+  def initialize_from_split(question, value)
+    # YAML translates these to booleans
+    if value == true
+      value = 'Yes'
+    elsif value == false
+      value = 'No'
+    end
+    
+    @value, @label = value.split('|', 2)
+    
     if @label.nil?
-      @label = str
+      @label = value
       @value = @label.parameterize
     end
   end
 
   def self.combination(question)
-    new(question, COMBINATION_VALUE)
+    new(question, COMBINATION_VALUE, COMBINATION_LABEL)
   end
 
   def survey_id
@@ -44,8 +54,8 @@ class Choice
 
   def as_json
     {
-      key: key,
       value: value,
+      display: label,
       count: count
     }
   end

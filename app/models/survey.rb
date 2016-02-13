@@ -67,6 +67,10 @@ class Survey
     @questions
   end
 
+  def [](key)
+    questions.detect {|q| q.key == key}
+  end
+
   def intersections
     if @intersections.nil?
       @intersections = @hash['intersections'].map {|h| Intersection.new(self, h) }

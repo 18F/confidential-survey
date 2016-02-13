@@ -26,7 +26,6 @@ module Serializers
       {
         key: key,
         text: text,
-        total: total_responses,
         type: question_type,
         choices: ch_out
       }

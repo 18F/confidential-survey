@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe Serializers::Question, type: :model do
   describe 'as_json' do
+    before { Tally.delete_all }
     let(:survey) { Survey.new('sample-survey') }
 
     describe 'for a freeform question' do

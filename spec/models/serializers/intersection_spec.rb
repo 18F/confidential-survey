@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Serializers::Intersection, type: :model do
   describe 'as_json' do
     before do
+      Tally.delete_all
       @survey = Survey.new('sample-survey')
       Tally.record('sample-survey', 'flavor|toppings', 'chocolate|sprinkles')
       Tally.record('sample-survey', 'flavor|toppings', 'chocolate|brownies')

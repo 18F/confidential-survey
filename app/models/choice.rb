@@ -51,12 +51,4 @@ class Choice
   def count
     tally_for(value)
   end
-
-  def as_json
-    {
-      value: value,
-      display: label,
-      count: count
-    }
-  end
 end

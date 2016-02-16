@@ -10,17 +10,13 @@ module Serializers
         end
       else
         ch_out = choices.map do |ch|
-          {
-            value: ch.value,
-            display: ch.label,
-            count: ch.count
-          }
+          Serializers::Choice.new(ch).as_json
         end
       end
 
       # FIXME
       if exclusive_combo?
-        ch_out << Choice.combination(self).as_json
+        ch_out << Serializers::Choice.new(::Choice.combination(self)).as_json
       end
 
       {

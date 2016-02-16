@@ -105,34 +105,4 @@ class Question
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-
-  # FIXME: move to Serializer
-  def as_json
-    if freeform?
-      ch_out = freeform_tallies_json
-    else
-      ch_out = choices.map(&:as_json)
-      ch_out << Choice.combination(self).as_json if exclusive_combo?
-    end
-
-    {
-      key: key,
-      text: text,
-      total: total_responses,
-      type: question_type,
-      choices: ch_out
-    }
-  end
-
-  private
-
-  def freeform_tallies_json
-    tallies.map do |t|
-      {
-        value: t.value,
-        count: t.count
-      }
-    end
-  end
-
 end

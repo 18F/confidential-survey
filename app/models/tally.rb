@@ -24,17 +24,6 @@ class Tally < ActiveRecord::Base
     tallies_for(survey_id, field).sum(:count)
   end
 
-  def as_json
-    fields = field.split('|')
-    values = value.split('|')
-
-    {
-      field: fields.length == 1 ? fields.first : fields,
-      value: values.length == 1 ? values.first : values,
-      count: count
-    }
-  end
-
   def to_s
     "Tally #{survey_id}:#{field} \"#{value}\": #{count}"
   end

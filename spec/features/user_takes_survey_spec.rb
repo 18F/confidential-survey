@@ -24,7 +24,7 @@ RSpec.feature 'user takes survey', type: :feature do
      ['toppings', 'sprinkles'], ['toppings', 'brownies'],
      ['desserts', 'cake'], ['name', 'Blue Bell']].each do |key, value|
       count = Tally.tally_for('sample-survey', key, value)
-      #puts "#{key} #{value}: #{count}"
+      # puts "#{key} #{value}: #{count}"
       expect(count).to eq(1)
     end
     # rubocop:enable Style/WordArray

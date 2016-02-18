@@ -3,7 +3,7 @@ module Serializers
     def tallies
       Tally.where(survey_id: survey_id, field: tally_key)
     end
-    
+
     def as_json
       {
         fields: keys,

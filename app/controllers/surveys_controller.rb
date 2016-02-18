@@ -10,7 +10,7 @@ class SurveysController < ApplicationController
   end
 
   def submit
-    #fail 'Survey ID does not match' unless params[:survey][:id] == @survey.id
+    # fail 'Survey ID does not match' unless params[:survey][:id] == @survey.id
 
     ResponseProcessor.new(params[:survey], @survey).perform
     redirect_to(action: :thanks)

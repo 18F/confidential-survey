@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20151102154115) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "tallies", force: :cascade do |t|
     t.string   "field",      limit: 1024,             null: false
     t.string   "value",      limit: 1024,             null: false
@@ -22,6 +25,6 @@ ActiveRecord::Schema.define(version: 20151102154115) do
     t.string   "survey_id"
   end
 
-  add_index "tallies", ["field", "value", "survey_id"], name: "index_tallies_on_field_and_value_and_survey_id", unique: true
+  add_index "tallies", ["field", "value", "survey_id"], name: "index_tallies_on_field_and_value_and_survey_id", unique: true, using: :btree
 
 end

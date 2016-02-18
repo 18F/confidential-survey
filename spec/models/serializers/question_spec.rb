@@ -1,5 +1,6 @@
-require "rails_helper"
+require 'rails_helper'
 
+# rubocop:disable Style/BracesAroundHashParameters
 RSpec.describe Serializers::Question, type: :model do
   describe 'as_json' do
     before { Tally.delete_all }
@@ -59,7 +60,8 @@ RSpec.describe Serializers::Question, type: :model do
                              {value: 'vanilla', display: 'Vanilla', count: 0},
                              {value: 'rocky', display: 'Rocky Road', count: 0},
                              {value: 'none', display: 'None', count: 0},
-                             {value: Choice::COMBINATION_VALUE, display: Choice::COMBINATION_LABEL, count: 1})
+                             {value: Choice::COMBINATION_VALUE,
+                              display: Choice::COMBINATION_LABEL, count: 1})
       end
     end
 
@@ -83,3 +85,4 @@ RSpec.describe Serializers::Question, type: :model do
     end
   end
 end
+# rubocop:enable Style/BracesAroundHashParameters

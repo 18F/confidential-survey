@@ -1,5 +1,4 @@
 class ResponseProcessor < Struct.new(:params, :survey)
-
   def perform
     pending = record_answers(params)
     record_intersections(pending)
@@ -10,7 +9,7 @@ class ResponseProcessor < Struct.new(:params, :survey)
   def survey_id
     survey.survey_id
   end
-  
+
   def record_answers(responses)
     pending = {}
 
@@ -34,7 +33,7 @@ class ResponseProcessor < Struct.new(:params, :survey)
 
     pending
   end
-  
+
   def record_intersections(pending)
     # now compute the intersection tallies
     survey.intersections.each do |intersection|

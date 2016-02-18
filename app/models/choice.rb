@@ -4,32 +4,32 @@ class Choice
 
   COMBINATION_VALUE = 'combination'.freeze
   COMBINATION_LABEL = 'Combination'.freeze
-  
-  def initialize(question, value, label=nil)
+
+  def initialize(question, value, label = nil)
     @question = question
 
-    unless label.nil?
+    if label.nil?
+      initialize_from_split(value)
+    else
       @value = value
       @label = label
-    else
-      initialize_from_split(question, value)
     end
   end
-  
-  def initialize_from_split(question, value)
+
+  def initialize_from_split(value)
     # YAML translates these to booleans
     if value == true
       value = 'Yes'
     elsif value == false
       value = 'No'
     end
-    
+
     @value, @label = value.split('|', 2)
-    
-    if @label.nil?
-      @label = value
-      @value = @label.parameterize
-    end
+
+    return unless @label.nil?
+
+    @label = value
+    @value = @label.parameterize
   end
 
   def self.combination(question)

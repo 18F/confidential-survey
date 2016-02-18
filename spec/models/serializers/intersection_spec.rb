@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Serializers::Intersection, type: :model do
   describe 'as_json' do
@@ -16,9 +16,11 @@ RSpec.describe Serializers::Intersection, type: :model do
     it 'should properly return intersections' do
       expect(@out[:fields]).to eq(%w(flavor toppings))
 
+      # rubocop:disable Style/BracesAroundHashParameters
       expect(@out[:choices]).to contain_exactly(
-                                  {values: %w(chocolate sprinkles), count: 2},
-                                  {values: %w(chocolate brownies), count: 1})
+        {values: %w(chocolate sprinkles), count: 2},
+        {values: %w(chocolate brownies), count: 1})
+      # rubocop:enable Style/BracesAroundHashParameters
     end
   end
 end

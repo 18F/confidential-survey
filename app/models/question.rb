@@ -33,12 +33,7 @@ class Question
 
   def choices
     return nil if freeform?
-
-    if @choices.nil?
-      @choices = @hash['values'].map {|v| Choice.new(self, v) }
-    end
-
-    @choices
+    @choices ||= @hash['values'].map {|v| Choice.new(self, v) }
   end
 
   def tallies

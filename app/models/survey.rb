@@ -68,7 +68,7 @@ class Survey
   end
 
   def [](key)
-    questions.detect {|q| q.key == key}
+    questions.detect {|q| q.key == key }
   end
 
   def intersections
@@ -78,7 +78,6 @@ class Survey
 
     @intersections
   end
-    
 
   def tally_for(field, value)
     Tally.tally_for(survey_id, field, value)
@@ -102,4 +101,3 @@ class Survey
     end
   end
 end
- 

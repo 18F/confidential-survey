@@ -8,10 +8,10 @@ RSpec.describe ResponseProcessor, type: :model do
 
     let(:params) { {} }
     let(:processor) { ResponseProcessor.new(params, @survey) }
-    
+
     context 'for an exclusive field' do
       context 'when there is single nonblank response' do
-        let(:params) { {'ice-cream' => ['yes', '']} }        
+        let(:params) { {'ice-cream' => ['yes', '']} }
 
         it 'should record a tally' do
           expect { processor.perform }.to change { @survey.tally_for('ice-cream', 'yes') }.by(1)
@@ -21,12 +21,12 @@ RSpec.describe ResponseProcessor, type: :model do
 
       context 'when there are multiple nonblank responses' do
         let(:params) { {'ice-cream' => %w(yes no)} }
-        
+
         it 'should raise an error if it gets multiple valid choices' do
           expect { processor.perform }.to raise_error(RuntimeError)
         end
       end
-      
+
       # one day
       it 'should raise an error for an invalid field value'
     end
@@ -34,7 +34,7 @@ RSpec.describe ResponseProcessor, type: :model do
     context 'for a exclusive-combo field' do
       context 'when the user selects one value' do
         let(:params) { {'flavor' => ['chocolate']} }
-        
+
         it 'should record that field value in the tally' do
           expect { processor.perform }.
             to change { @survey.tally_for('flavor', 'chocolate') }.by(1)
@@ -84,19 +84,19 @@ RSpec.describe ResponseProcessor, type: :model do
 
       context 'when the field is blank' do
         let(:params) { {'name' => ''} }
-        
+
         it 'should not record if the value is blank' do
-        expect { processor.perform }.to_not change { Tally.count }
+          expect { processor.perform }.to_not change { Tally.count }
         end
       end
     end
-    
+
     context 'for an intersection' do
       before(:all) do
         Tally.delete_all
-        params = {'flavor' => ['chocolate'], 'toppings' => ['sprinkles', 'hot-fudge'] }
+        params = {'flavor' => ['chocolate'], 'toppings' => ['sprinkles', 'hot-fudge']}
         ResponseProcessor.new(params, @survey).perform
-        params = { 'flavor' => ['chocolate'], 'toppings' => ['hot-fudge'] }
+        params = {'flavor' => ['chocolate'], 'toppings' => ['hot-fudge']}
         ResponseProcessor.new(params, @survey).perform
       end
 

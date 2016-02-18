@@ -5,22 +5,20 @@ class SurveysController < ApplicationController
   def show
     respond_to do |format|
       format.html { @md = Redcarpet::Markdown.new(Redcarpet::Render::HTML) }
-      format.json { render json: @survey.as_json }
+      format.json { render json: Serializers::Survey.new(@survey).as_json }
     end
   end
 
   def submit
-    if params[:survey][:id] != @survey.id
-      fail 'Survey ID does not match'
-    end
-    
-    @survey.record(params[:survey])
+    # fail 'Survey ID does not match' unless params[:survey][:id] == @survey.id
+
+    ResponseProcessor.new(params[:survey], @survey).perform
     redirect_to(action: :thanks)
   end
 
   def thanks
   end
-  
+
   private
 
   def load_survey

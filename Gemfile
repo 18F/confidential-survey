@@ -30,20 +30,16 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-#gem 'bourbon', '~> 4.2.0'
 gem 'us_web_design_standards', git: 'https://github.com/18F/us_web_design_standards_gem.git'
 gem 'flutie'
 gem 'high_voltage'
 gem 'neat', '~> 1.7.0'
 gem 'normalize-rails', '~> 3.0.0'
 gem 'unicorn'
-gem 'simple_form'
 gem 'title'
 gem 'ice_nine'
-gem 'memoist'
 gem 'redcarpet'
 gem 'silencer'
-gem 'session_off'
 
 group :production do
   gem 'rails_12factor'
@@ -73,13 +69,11 @@ end
 
 group :test do
   gem 'capybara-webkit'
-  gem 'database_cleaner'
   gem 'formulaic'
   gem 'launchy'
   gem 'shoulda-matchers'
-  gem 'simplecov', require: false
   gem 'timecop'
-  gem 'webmock'
+  gem 'codeclimate-test-reporter', require: nil
 end
 
 group :staging, :production do

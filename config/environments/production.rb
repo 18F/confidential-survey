@@ -77,7 +77,7 @@ Rails.application.configure do
   # disable activerecord logging
   config.active_record.logger = nil
 
-  config.middleware.swap Rails::Rack::Logger, Silencer::Logger, :silence => [%r{^/survey/}]  
+  config.middleware.swap Rails::Rack::Logger, Silencer::Logger, silence: [%r{^/survey/}]
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

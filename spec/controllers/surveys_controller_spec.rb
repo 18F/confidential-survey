@@ -12,7 +12,7 @@ RSpec.describe SurveysController, type: :controller do
         get :show, id: 'sample-survey'
         expect(response).to render_template('show')
       end
-      
+
       it' should instantiate a Markdown processor' do
         get :show, id: 'sample-survey'
         expect(assigns(:md)).to_not be_nil

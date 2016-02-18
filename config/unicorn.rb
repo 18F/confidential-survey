@@ -1,7 +1,8 @@
-worker_processes Integer(ENV["WEB_CONCURRENCY"] || 3)
+worker_processes Integer(ENV['WEB_CONCURRENCY'] || 3)
 timeout 15
 preload_app true
 
+# rubocop:disable Lint/UnusedBlockArgument
 before_fork do |server, worker|
   Signal.trap 'TERM' do
     puts 'Unicorn master intercepting TERM and sending myself QUIT instead'
@@ -20,3 +21,4 @@ after_fork do |server, worker|
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.establish_connection
 end
+# rubocop:enable Lint/UnusedBlockArgument

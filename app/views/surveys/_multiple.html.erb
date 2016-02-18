@@ -4,7 +4,7 @@
     <%- question.choices.each do |choice| %>
     <li class="radio">
       <%- option_id = "#{question.key}-#{choice.value}" %>
-      <%= form.check_box question.key, {id: option_id}, choice.value %>
+      <%= check_box_tag "survey[#{question.key}][]", choice.value, false, {id: option_id} %>
       <%= form.label choice.label, for: option_id %>
     </li>
     <%- end %>

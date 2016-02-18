@@ -30,7 +30,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'us_web_design_standards', git: 'https://github.com/18F/us_web_design_standards_gem.git'
+gem 'us_web_design_standards' #, git: 'https://github.com/18F/us_web_design_standards_gem.git'
 gem 'flutie'
 gem 'high_voltage'
 gem 'neat', '~> 1.7.0'

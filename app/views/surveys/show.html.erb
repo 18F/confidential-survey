@@ -9,43 +9,27 @@
   </div>
 
   <div class="usa-grid">
-    <%= simple_form_for @survey, url: survey_submit_path(id: @survey.id) do |f| %>
-    <%= f.input :id, value: @survey.id, as: :hidden %>
+    <%= form_for @survey, url: survey_submit_path(@survey.id) do |form| %>
     <%- @survey.questions.each do |question| %>
       <fieldset>
         <%- case question.question_type %>
           <%- when 'exclusive' %>
-            <%= f.input question.key,
-                label: question.text,
-                hint: question.hint || '(pick one)',
-                as: :radio_buttons,
-                required: false,
-                collection: question.choices_for_form %>
+            <%= render partial: 'exclusive', locals: {form: form, question: question} %>
           <%- when 'multiple', 'exclusive-combo' %>
-            <%= f.input question.key,
-                label: question.text,
-                as: :check_boxes,
-                hint: question.hint,
-                required: false,
-                collection: question.choices_for_form,
-                input_html: { class: 'usa-unstyled-list' } %>
+            <%= render partial: 'multiple', locals: {form: form, question: question} %>
           <%- when 'freeform' %>
-            <%= f.input question.key,
-                hint: question.hint,
-                label: question.text,
-                required: false %>
+            <%= render partial: 'freeform', locals: {form: form, question: question} %>
          <%- end %>
 
-       <%- unless question.description.blank? %>
-         <div class="description">
-           <%= raw @md.render(question.description) %>
-         </div>
-       <%- end %>
+        <%- unless question.description.blank? %>
+          <div class="description">
+            <%= raw @md.render(question.description) %>
+          </div>
+        <%- end %>
       </fieldset>
+    <%- end %>
 
-      <%- end %>
-
-      <%= f.submit 'Submit Response' %>
+      <%= form.submit 'Submit Response' %>
     <%- end %>
   </div>
 </div>

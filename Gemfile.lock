@@ -161,7 +161,6 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    memoist (0.14.0)
     method_source (0.8.2)
     mime-types (2.99)
     mini_portile2 (2.0.0)
@@ -259,16 +258,11 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
-    session_off (0.5.1)
-      actionpack (>= 2.3)
     sexp_processor (4.6.1)
     shoulda-matchers (3.1.1)
       activesupport (>= 4.0.0)
     silencer (0.6.0)
       railties (>= 3)
-    simple_form (3.2.1)
-      actionpack (> 4, < 5.1)
-      activemodel (> 4, < 5.1)
     simplecov (0.11.1)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -346,7 +340,6 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   launchy
-  memoist
   neat (~> 1.7.0)
   normalize-rails (~> 3.0.0)
   pg
@@ -359,10 +352,8 @@ DEPENDENCIES
   rspec-rails (~> 3.3.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
-  session_off
   shoulda-matchers
   silencer
-  simple_form
   spring
   spring-commands-rspec
   sqlite3

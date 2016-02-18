@@ -36,13 +36,10 @@ gem 'high_voltage'
 gem 'neat', '~> 1.7.0'
 gem 'normalize-rails', '~> 3.0.0'
 gem 'unicorn'
-gem 'simple_form'
 gem 'title'
 gem 'ice_nine'
-gem 'memoist'
 gem 'redcarpet'
 gem 'silencer'
-gem 'session_off'
 
 group :production do
   gem 'rails_12factor'

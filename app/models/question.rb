@@ -1,8 +1,5 @@
-require 'memoist'
-
 # This is not backed to the database, but just initialized by loading the form
 class Question
-  extend Memoist
   attr_reader :survey
 
   def initialize(survey, hash = {})
@@ -43,19 +40,6 @@ class Question
 
     @choices
   end
-
-  def choices_for_form
-    return nil if freeform?
-
-    out = {}
-    choices.each do |c|
-      out[c.label] = c.value
-    end
-
-    out
-  end
-
-  memoize :choices, :choices_for_form
 
   def tallies
     Tally.tallies_for(survey_id, key)

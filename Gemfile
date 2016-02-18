@@ -38,7 +38,6 @@ gem 'normalize-rails', '~> 3.0.0'
 gem 'unicorn'
 gem 'title'
 gem 'ice_nine'
-gem 'memoist'
 gem 'redcarpet'
 gem 'silencer'
 

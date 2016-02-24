@@ -5,6 +5,7 @@ RSpec.feature 'user takes survey', type: :feature do
     Tally.delete_all
     visit '/surveys/sample-survey'
 
+    survey = Survey.new('sample-survey')
     expect(page).to have_content('Ice Cream Survey')
     expect(page).to have_content('This is a sample survey to see how much you really love ice cream.')
 
@@ -29,6 +30,8 @@ RSpec.feature 'user takes survey', type: :feature do
     end
     # rubocop:enable Style/WordArray
 
+    expect(survey.participants).to eq(1)
+    
     expect(page).to have_content('Thank you for participating in this survey')
   end
 end

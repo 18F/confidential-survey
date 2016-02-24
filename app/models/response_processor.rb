@@ -2,6 +2,7 @@ class ResponseProcessor < Struct.new(:params, :survey)
   def perform
     pending = record_answers(params)
     record_intersections(pending)
+    survey.count_participant
   end
 
   private

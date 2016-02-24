@@ -3,6 +3,9 @@
 class Survey
   include ActiveModel::Conversion
 
+  SURVEY_META_KEY = '_survey'.freeze
+  SURVEY_PARTICIPANTS = 'participants'.freeze
+  
   # Needed to make Rails forms happy
   def model_name
     ActiveModel::Name.new(Survey)
@@ -87,6 +90,14 @@ class Survey
     Tally.where(survey_id: survey_id, field: field)
   end
 
+  def count_participant
+    Tally.record(survey_id, SURVEY_META_KEY, SURVEY_PARTICIPANTS)
+  end
+
+  def participants
+    tally_for(SURVEY_META_KEY, SURVEY_PARTICIPANTS)
+  end
+  
   private
 
   def validate_survey

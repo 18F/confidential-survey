@@ -70,6 +70,10 @@ class Survey
     @questions
   end
 
+  def valid_question_key?(key)
+    questions.detect {|q| q.key == key } != nil
+  end
+  
   def [](key)
     questions.detect {|q| q.key == key }
   end

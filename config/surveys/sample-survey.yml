@@ -28,6 +28,7 @@ questions:
     description: This is a `multiple` field. This counts each choice separately.
     type: multiple
     values:
+      - Hot Fudge
       - Sprinkles
       - Brownies
       - Chocolate Chips

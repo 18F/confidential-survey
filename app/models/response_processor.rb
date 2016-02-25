@@ -2,6 +2,7 @@ class ResponseProcessor < Struct.new(:params, :survey)
   def perform
     pending = record_answers(params)
     record_intersections(pending)
+    survey.count_participant
   end
 
   private
@@ -15,10 +16,12 @@ class ResponseProcessor < Struct.new(:params, :survey)
 
     responses.each do |key, answers|
       next if key == 'id'
-      q = survey.questions.detect {|x| x.key == key }
-      fail "Question #{key} not found" if q.nil?
+      question = survey[key]
+      fail SurveyError, "Question #{key} not found" if question.nil?
 
-      q.response_pairs(answers).each do |pair|
+      question.response_pairs(answers).each do |pair|
+        fail SurveyError, "Invalid choice '#{pair.last}' for question #{key}" unless question.valid_choice_value?(pair.last)
+        
         pending[pair.first] ||= []
         pending[pair.first] << pair.last
       end

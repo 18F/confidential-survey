@@ -23,12 +23,17 @@ RSpec.describe ResponseProcessor, type: :model do
         let(:params) { {'ice-cream' => %w(yes no)} }
 
         it 'should raise an error if it gets multiple valid choices' do
-          expect { processor.perform }.to raise_error(RuntimeError)
+          expect { processor.perform }.to raise_error(SurveyError)
         end
       end
 
-      # one day
-      it 'should raise an error for an invalid field value'
+      context 'when passed an invalid field value' do
+        let(:params) { {'ice-cream' => 'hell-no'} }
+
+        it 'should raise an error' do
+          expect { processor.perform }.to raise_error(SurveyError)
+        end
+      end
     end
 
     context 'for a exclusive-combo field' do
@@ -55,6 +60,15 @@ RSpec.describe ResponseProcessor, type: :model do
             to change { @survey.tally_for('flavor', Choice::COMBINATION_VALUE) }.by(1)
         end
       end
+
+      context 'when passed an invalid field value' do
+        let(:params) { {'flavor' => 'fudge-ripple'} }
+
+        it 'should raise an error' do
+          expect { processor.perform }.to raise_error(SurveyError)
+        end
+      end
+
     end
 
     context 'for a true multiple field' do
@@ -69,7 +83,15 @@ RSpec.describe ResponseProcessor, type: :model do
 
       it 'should not update the tally for the combined value' do
         expect { subject }.
-          to_not change { @survey.tally_for('dessgerts', Choice::COMBINATION_VALUE) }
+          to_not change { @survey.tally_for('desserts', Choice::COMBINATION_VALUE) }
+      end
+
+      context 'when passed an invalid field value' do
+        let(:params) { {'desserts' => 'halvah'} }
+
+        it 'should raise an error' do
+          expect { processor.perform }.to raise_error(SurveyError)
+        end
       end
     end
 
@@ -86,7 +108,8 @@ RSpec.describe ResponseProcessor, type: :model do
         let(:params) { {'name' => ''} }
 
         it 'should not record if the value is blank' do
-          expect { processor.perform }.to_not change { Tally.count }
+          processor.perform
+          expect(Tally.where(survey_id: @survey.survey_id, field: 'name', value: '').count).to eq(0)
         end
       end
     end
@@ -103,6 +126,82 @@ RSpec.describe ResponseProcessor, type: :model do
       it 'should count the intersection of both elements' do
         expect(@survey.tally_for('flavor', 'chocolate')).to eq(2)
         expect(@survey.tally_for('flavor|toppings', 'chocolate|sprinkles')).to eq(1)
+      end
+    end
+    
+    context 'when sent a nonexistent field name' do
+      let(:params) { {'foo' => %w(bar) } }
+      before(:all) { Tally.delete_all }
+      
+      it 'should raise an error' do
+        expect { processor.perform }.to raise_error(SurveyError)
+      end
+      
+      it 'should not record a tally' do
+        expect { processor.perform }.to raise_error(SurveyError)
+        expect(@survey.tally_for('foo', 'bar')).to eq(0)
+      end
+
+      it 'should not count this as a participant' do
+        expect { processor.perform }.to raise_error(SurveyError)
+        expect(@survey.participants).to eq(0)
+      end
+    end
+    
+    context 'when accepting multiple fields' do
+      let(:params) do
+        {
+          'name' => 'Jacob Harris',
+          'desserts' => %w(cake cookies),
+          'ice-cream' => ['yes'],
+          'flavor' => ['chocolate'],
+          'toppings' => %w(sprinkles brownies)
+        }
+      end
+
+      it 'should increment multiple tallies' do
+        Tally.delete_all
+        processor.perform
+
+        params.each do |key, values|
+          values = [values] unless values.is_a?(Array)
+          values.each do |value|
+            expect(@survey.tally_for(key, value)).to eq(1)
+          end
+        end
+      end
+
+      it 'should count the participant' do
+        expect { processor.perform }.to change { @survey.participants }.by(1)
+      end
+    end
+
+    context 'if processing throws an error' do
+      let(:params) do
+        {
+          'name' => 'Jacob Harris',
+          'desserts' => %w(cake cookies),
+          'ice-cream' => %w(yes no),
+          'flavor' => %w(chocolate),
+          'toppings' => %w(cake cookies)
+        }
+      end
+
+      it 'should not increment any of the tallies' do
+        expect { processor.perform }.to raise_error(SurveyError)
+
+        params.each do |key, values|
+          values = [values] unless values.is_a?(Array)
+          values.each do |value|
+            expect(@survey.tally_for(key, value)).to eq(0)
+          end
+        end
+      end
+      
+      it 'should not increment the number of the participants' do
+        before = @survey.participants
+        expect { processor.perform }.to raise_error(SurveyError)
+        expect(@survey.participants).to eq(before)
       end
     end
   end

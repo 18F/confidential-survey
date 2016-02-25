@@ -5,6 +5,7 @@ module Serializers
         id: survey_id,
         title: title,
         description: description,
+        participants: participants,
         questions: questions.map {|q| Serializers::Question.new(q).as_json },
         intersections: intersections.map {|i| Serializers::Intersection.new(i).as_json }
       }

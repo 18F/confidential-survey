@@ -1,0 +1,2 @@
+class SurveyError < RuntimeError
+end

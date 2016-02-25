@@ -54,7 +54,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'sqlite3'
+  gem 'reek'
   gem 'awesome_print'
   gem 'bundler-audit', require: false
   gem 'byebug'

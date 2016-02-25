@@ -80,7 +80,8 @@ RSpec.describe Serializers::Question, type: :model do
                              {value: 'brownies', display: 'Brownies', count: 0},
                              {value: 'chocolate-chips', display: 'Chocolate Chips', count: 0},
                              {value: 'broccoli', display: 'Broccoli', count: 1},
-                             {value: 'heath-bar', display: 'Heath Bar', count: 0})
+                             {value: 'heath-bar', display: 'Heath Bar', count: 0},
+                             {value: 'hot-fudge', display: 'Hot Fudge', count: 0})
       end
     end
   end

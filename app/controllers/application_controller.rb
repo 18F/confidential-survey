@@ -5,8 +5,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   # rubocop:disable Style/GlobalVars
-  unless Rails.env.development? || Rails.env.test?
-    http_basic_authenticate_with name: $auth_name, password: $auth_password
+  def require_admin_http_auth!
+    return if Rails.env.development? || Rails.env.test?
+    authenticate_with_http_basic do |name, password|
+      name == $auth_name && password == $auth_password
+    end
   end
   # rubocop:enable Style/GlobalVars
 end

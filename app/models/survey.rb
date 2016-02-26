@@ -5,7 +5,7 @@ class Survey
 
   SURVEY_META_KEY = '_survey'.freeze
   SURVEY_PARTICIPANTS = 'participants'.freeze
-  
+
   # Needed to make Rails forms happy
   def model_name
     ActiveModel::Name.new(Survey)
@@ -32,10 +32,6 @@ class Survey
     raise ActiveRecord::RecordNotFound, "Survey #{arg} not found"
   end
 
-  def title
-    @hash['title']
-  end
-
   def intro
     if @intro.nil?
       @intro = @hash['intro']
@@ -49,6 +45,10 @@ class Survey
     @intro
   end
 
+  def title
+    @hash['title']
+  end
+
   def description
     @hash['description']
   end
@@ -57,6 +57,14 @@ class Survey
     !(@hash.key?('active') && @hash['active'] == false)
   end
 
+  def valid_token?(token)
+    SurveyToken.valid?(survey_id, token)
+  end
+
+  def revoke_token(token)
+    SurveyToken.revoke(survey_id, token)
+  end
+  
   def survey_id
     @hash['id']
   end
@@ -73,7 +81,7 @@ class Survey
   def valid_question_key?(key)
     questions.detect {|q| q.key == key } != nil
   end
-  
+
   def [](key)
     questions.detect {|q| q.key == key }
   end
@@ -108,11 +116,11 @@ class Survey
     fail 'You must include an id field in the survey' if survey_id.blank?
   end
 
-  def method_missing(method_sym, *arguments, &block)
-    if @hash['questions'].any? {|h| h['key'] == method_sym.to_s }
-      nil
-    else
-      super
-    end
-  end
+  # def method_missing(method_sym, *arguments, &block)
+  #   if @hash['questions'].any? {|h| h['key'] == method_sym.to_s }
+  #     nil
+  #   else
+  #     super
+  #   end
+  # end
 end

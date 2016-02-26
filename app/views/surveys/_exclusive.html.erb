@@ -1,11 +1,11 @@
 <div class="input">
-  <%= form.label question.key, question.text %>
+  <%= label_tag "survey[#{question.key}]", question.text %>
   <ul class="usa-unstyled-list">
     <%- question.choices.each do |choice| %>
     <li class="radio">
       <%- option_id = "#{question.key}-#{choice.value}" %>
-      <%= form.radio_button question.key, choice.value, id: option_id %>
-      <%= form.label choice.label, for: option_id %>
+      <%= radio_button_tag "survey[#{question.key}]", choice.value, false, id: option_id %>
+      <%= label_tag option_id, choice.label %>
     </li>
     <%- end %>
   </ul>

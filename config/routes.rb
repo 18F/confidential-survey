@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'surveys/thanks' => 'surveys#thanks'
+  get 'surveys/thanks' => 'surveys#thanks', as: 'thanks'
   get 'surveys/:id' => 'surveys#show'
   post 'surveys/:id' => 'surveys#submit', as: 'survey_submit'
 

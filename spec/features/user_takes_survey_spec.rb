@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.feature 'user takes survey', type: :feature do
   scenario 'submitting a survey' do
     Tally.delete_all
-    visit '/surveys/sample-survey'
+    token = SurveyToken.generate('sample-survey')
 
     survey = Survey.new('sample-survey')
+    visit "/surveys/sample-survey?token=#{token}"
+
     expect(page).to have_content('Ice Cream Survey')
     expect(page).to have_content('This is a sample survey to see how much you really love ice cream.')
 
@@ -19,6 +21,8 @@ RSpec.feature 'user takes survey', type: :feature do
 
     click_on('Submit')
 
+    expect(page).to have_content('Thank you for participating in this survey')
+
     # Check that we have responses
     # rubocop:disable Style/WordArray
     [['ice-cream', 'yes'], ['flavor', 'combination'],
@@ -26,12 +30,11 @@ RSpec.feature 'user takes survey', type: :feature do
      ['desserts', 'cake'], ['name', 'Blue Bell']].each do |key, value|
       count = Tally.tally_for('sample-survey', key, value)
       # puts "#{key} #{value}: #{count}"
-      expect(count).to eq(1)
+      expect(count).to eq(1), "Expected to record tally for #{key}=#{value}"
     end
     # rubocop:enable Style/WordArray
 
     expect(survey.participants).to eq(1)
     
-    expect(page).to have_content('Thank you for participating in this survey')
   end
 end

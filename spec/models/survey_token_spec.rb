@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe SurveyToken do
   before { SurveyToken.delete_all }
-  
+
   describe 'generate' do
     it 'should return a token string and save a new token for a survey' do
       token = SurveyToken.generate('sample-survey')
@@ -18,15 +18,15 @@ RSpec.describe SurveyToken do
       token = SurveyToken.generate('sample-survey')
       expect(SurveyToken.valid?('sample-survey', token)).to be_truthy
     end
-    
+
     it 'should return false if the token is not found' do
       expect(SurveyToken.valid?('sample-survey', 'foo')).to be_falsey
     end
-    
+
     it 'should return false if the token is found for a different survey' do
       token = SurveyToken.generate('sample-survey')
       expect(SurveyToken.valid?('foo', token)).to be_falsey
-    end    
+    end
   end
 
   describe 'revoke' do
@@ -43,7 +43,7 @@ RSpec.describe SurveyToken do
       SurveyToken.revoke('foo', token)
       expect(SurveyToken.count).to eq(1)
     end
-    
+
     it 'should not raise an error if the token is not found' do
       expect { SurveyToken.revoke('foo', 'bazquux') }.to_not raise_error
     end

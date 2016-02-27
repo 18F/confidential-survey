@@ -1,10 +1,10 @@
-# rubocop:disable Style/GlobalVars
-unless Rails.env.development? || Rails.env.test?
-  $auth_name = ENV['HTTP_AUTH_NAME']
-  $auth_password = ENV['HTTP_AUTH_PASSWORD']
-
-  if $auth_name.blank? || $auth_password.blank?
-    fail 'You must provide an HTTP_AUTH_NAME and HTTP_AUTH_PASSWORD environment variables'
-  end
+def admin_auth_name
+  fail 'You must specify a SURVEY_ADMIN_USER' if ENV['SURVEY_ADMIN_USER'].blank?
+  ENV['SURVEY_ADMIN_USER']
 end
-# rubocop:enable Style/GlobalVars
+
+def admin_auth_password
+  fail 'You must provide an SURVEY_ADMIN_PASSWORD' if ENV['SURVEY_ADMIN_PASSWORD'].blank?
+  ENV['SURVEY_ADMIN_PASSWORD']
+end
+

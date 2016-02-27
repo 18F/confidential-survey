@@ -2,7 +2,7 @@ require 'securerandom'
 
 class SurveyToken < ActiveRecord::Base
   def self.generate(survey_id)
-    rec = create(survey_id: survey_id, token: SecureRandom.uuid)
+    rec = create(survey_id: survey_id, token: SecureRandom.urlsafe_base64)
     rec.token
   end
 
@@ -19,5 +19,9 @@ class SurveyToken < ActiveRecord::Base
   
   def self.revoke_all_for_survey(survey_id)
     delete_all(survey_id: survey_id)
+  end
+
+  def to_s
+    token
   end
 end

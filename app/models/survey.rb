@@ -16,6 +16,8 @@ class Survey
   end
 
   def initialize(arg)
+    raise ActiveRecord::NotFound if arg.nil?
+    
     hash = case arg
            when String
              YAML.load(File.open(Rails.root.join('config', 'surveys', "#{arg}.yml"))).merge('id' => arg)
@@ -63,6 +65,10 @@ class Survey
 
   def revoke_token(token)
     SurveyToken.revoke(survey_id, token)
+  end
+
+  def revoke_all_tokens
+    SurveyToken.revoke_all_for_survey(survey_id)
   end
   
   def survey_id

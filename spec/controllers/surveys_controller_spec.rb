@@ -170,4 +170,53 @@ RSpec.describe SurveysController, type: :controller do
       end
     end
   end
+
+  describe 'generate_token' do
+    it 'should fail unless the user authenticates as an admin' do
+      get :generate_token, id: 'sample-survey'
+      expect(response).to have_http_status(:unauthorized)
+    end
+    
+    it 'should generate and a single token and return one url if passed no argument' do
+      SurveyToken.delete_all
+      auth_login
+      get :generate_token, {id: 'sample-survey'}
+      expect(response).to have_http_status(:ok)
+      token = SurveyToken.first
+      expect(token).to_not be_nil
+      expect(response.body).to eq("#{survey_url('sample-survey')}?token=#{token}")
+    end
+    
+    it 'should generate 10 tokens and their urls if passed n=10' do
+      SurveyToken.delete_all
+      auth_login
+      post :generate_token, {id: 'sample-survey', n: 10}
+      expect(response).to have_http_status(:ok)
+      expect(SurveyToken.count).to eq(10)
+      SurveyToken.all.each do |t|
+        expect(response.body).to match(t.token)
+      end
+    end
+  end
+
+  describe 'revoke_tokens' do
+    it 'should fail unless the user authenticates as admin' do
+      SurveyToken.generate('sample-survey')
+      post :revoke_tokens, id: 'sample-survey'
+      expect(response).to have_http_status(:unauthorized)
+      expect(SurveyToken.count).to eq(1)
+    end
+
+    it 'should revoke all tokens for the application' do
+      SurveyToken.delete_all
+      SurveyToken.generate('sample-survey')
+      SurveyToken.generate('sample-survey')
+      expect(SurveyToken.count).to eq(2)
+
+      auth_login
+      post :revoke_tokens, {id: 'sample-survey'}
+      expect(response).to have_http_status(:ok)
+      expect(SurveyToken.count).to eq(0)
+    end
+  end
 end

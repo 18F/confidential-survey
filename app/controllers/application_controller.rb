@@ -6,8 +6,7 @@ class ApplicationController < ActionController::Base
 
   # rubocop:disable Style/GlobalVars
   def require_admin_http_auth!
-    return if Rails.env.development? || Rails.env.test?
-    authenticate_with_http_basic do |name, password|
+    authenticate_or_request_with_http_basic('Administration') do |name, password|
       name == $auth_name && password == $auth_password
     end
   end

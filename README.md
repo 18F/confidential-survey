@@ -187,17 +187,60 @@ The survey name is used to key all tallies for its responses in the
 system. This means that changing the survey name/URL will reset all
 its tallies to 0 unless you rename all the old rows to use the new ID.
 
+## Tokens and HTTP Authentication
+
+The survey application supports two different modes of securing access:
+
+* One-time use tokens that can be distributed to a population
+* A single HTTP authentication username/password shared across all users (not yet implemented)
+
+The token scheme requires the survey administrators to generate a pool
+of tokens for the survey. These can then be distributed out to survey
+participants. It is best that whoever is doing this distribution does
+not retain a list of which tokens are sent to which users, since that
+information could potentially be used by someone with database access
+to identify people who have not taken the survey.
+
+To generate tokens, an administrator can send a GET or POST request to
+`/surveys/SURVEY-NAME/token` and this will generate a token linked to
+the survey and return a URL that can be given to a single user for
+taking the survey. This endpoint can be called to return a batch of
+tokens by appending a `n=` argument to the request. Here is an example
+of calling it on a development instance running on localhost.
+
+```shell
+curl --user ${SURVEY_ADMIN_USER}:${SURVEY_ADMIN_PASSWORD} http://localhost:3000/surveys/sample-survey/token\?n\=10
+
+http://localhost:3000/surveys/sample-survey?token=z9OJSmzFZcKWDpXlnt1LPA
+http://localhost:3000/surveys/sample-survey?token=wE-gRGcI0ayHH3Q8qW5MtA
+http://localhost:3000/surveys/sample-survey?token=Hi59JzRPbXOAN9Mu2876sg
+http://localhost:3000/surveys/sample-survey?token=FU7bwF29kKqcV-27lAIfCQ
+http://localhost:3000/surveys/sample-survey?token=Wm-pvsfkr20y-pGALiYjuw
+http://localhost:3000/surveys/sample-survey?token=FmOml8wTKJo7mHAjf_8y8A
+http://localhost:3000/surveys/sample-survey?token=xKquRdHvi0YpJ2iADxpZpw
+http://localhost:3000/surveys/sample-survey?token=PHPd_SW5i-AzZaIUscl13w
+http://localhost:3000/surveys/sample-survey?token=iqQPTzQ21pdEaKjROb6Ozw
+http://localhost:3000/surveys/sample-survey?token=C7Zg2J_1nyFpW-dWms-gNQ
+```
+
+Once a user uses this URL to fill out the survey, the token will be
+revoked and the URL will not work again. This means that the same URL
+should not be given to several users. The token is only used for
+access and does not identify a respondent in any way. There is no
+issue with generating many extra tokens that aren't used, and tokens
+can be generated at any time when a survey is active. To close access
+to a survey, all tokens can be revoked by an administrator.
+
+``` shell
+curl --user ${SURVEY_ADMIN_USER}:${SURVEY_ADMIN_PASSWORD} http://localhost:3000/surveys/sample-survey/revoke
+```
+
 ## Notes on Survey Construction
 
 - I am not a lawyer. Neither is this application. Just because you
   _can_ use this program to create a survey for people like employees or
   students, this application doesn't grant you the legal or moral right
   to do so. Please consult with the appropriate people first.
-- Confidential surveys -- or responses to specific questions within -- should
-  never be mandatory and this program will never include cookies or
-  authentication for that reason.
-- This means there are no protections against users voting more than once. **Do
-  not use this to hold an election.**
 - Whenever possible, users should be presented with an option to
   explicitly decline to answer. Users always have the option of silently
   declining by not selecting any choice, but those rejections are simply

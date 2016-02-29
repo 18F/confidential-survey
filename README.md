@@ -96,10 +96,14 @@ cd confidential-survey
 bundle install
 bundle exec rake db:setup
 bundle exec rails server
+export SURVEY_ADMIN_NAME=debug
+export SURVEY_ADMIN_PASSWORD=debug
 ```
 
 Then you can go to http://localhost:3000/survey/sample-survey and you
-should see a survey you can fill out.
+should see a survey you can fill out. If you visit an
+administrator-protected route, it should prompt you for the username
+and password set above.
 
 ## Testing
 
@@ -130,10 +134,8 @@ cf create-service rds shared-psql survey-psql
 Set environment variables with `cf set-env`:
 
 ```
-cf set-env survey HTTP_AUTH_NAME [username]
-cf set-env survey HTTP_AUTH_PASSWORD: [password]
-cf set-env survey-ssh HTTP_AUTH_NAME [username]
-cf set-env survey-ssh HTTP_AUTH_PASSWORD: [password]
+cf set-env survey SURVEY_ADMIN_NAME [username]
+cf set-env survey SURVEY_ADMIN_PASSWORD: [password]
 ```
 
 The application is currently secured in production with blanket HTTP

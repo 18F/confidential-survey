@@ -34,7 +34,7 @@ class SurveysController < ApplicationController
 
     n.times.each do
       token = SurveyToken.generate(@survey.survey_id)
-      out << survey_url(@survey.survey_id) + '?token=' + token + "\n
+      out << survey_url(@survey.survey_id) + '?token=' + token + "\n"
     end
     
     render text: out, status: :ok

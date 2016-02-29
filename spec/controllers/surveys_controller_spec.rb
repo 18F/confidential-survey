@@ -184,7 +184,7 @@ RSpec.describe SurveysController, type: :controller do
       expect(response).to have_http_status(:ok)
       token = SurveyToken.first
       expect(token).to_not be_nil
-      expect(response.body).to eq("#{survey_url('sample-survey')}?token=#{token}")
+      expect(response.body).to eq("#{survey_url('sample-survey')}?token=#{token}\n")
     end
     
     it 'should generate 10 tokens and their urls if passed n=10' do

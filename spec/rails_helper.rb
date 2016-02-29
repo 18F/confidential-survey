@@ -1,10 +1,16 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
+ENV['SURVEY_ADMIN_USER'] = 'debug'
+ENV['SURVEY_ADMIN_PASSWORD'] = 'debug'
+
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
+require File.expand_path('../../config/initializers/http_authentication.rb', __FILE__)
+
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
+
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'factory_girl'
 
@@ -21,7 +27,7 @@ require 'factory_girl'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -39,6 +45,8 @@ RSpec.configure do |config|
   # Include FactoryGirl methods
   config.include FactoryGirl::Syntax::Methods
 
+  config.include AuthRequestHelper, :type => :controller
+    
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
   # `post` in specs under `spec/controllers`.

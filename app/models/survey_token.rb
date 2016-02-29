@@ -8,9 +8,9 @@ class SurveyToken < ActiveRecord::Base
 
   def self.valid?(survey_id, token)
     return false if token.blank?
-    return true if Rails.env.development? && token = 'debug'
+    return true if Rails.env.development? && token == 'debug'
     where(survey_id: survey_id, token: token).exists?
-  end
+  en
   
   def self.revoke(survey_id, token)
     t = where(survey_id: survey_id, token: token).first

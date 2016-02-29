@@ -40,6 +40,7 @@ gem 'title'
 gem 'ice_nine'
 gem 'redcarpet'
 gem 'silencer'
+gem 'reek'
 
 group :production do
   gem 'rails_12factor'
@@ -54,7 +55,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'reek'
   gem 'awesome_print'
   gem 'bundler-audit', require: false
   gem 'byebug'

@@ -10,7 +10,10 @@
 
   <div class="usa-grid">
     <%= form_for @survey, url: survey_submit_path(@survey.id) do |form| %>
-    <%= hidden_field_tag 'token', @token %>
+    <%- @hidden.each do |name, value| %>
+      <%= hidden_field_tag name, value %>
+    <%- end %>
+
     <%- @survey.questions.each do |question| %>
       <fieldset>
         <%- case question.question_type %>

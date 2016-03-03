@@ -61,19 +61,62 @@ RSpec.describe SurveysController, type: :controller do
     end
 
     context 'for a survey using HTTP authentication' do
-      # TODO
+      context 'when the user provides the correct credentials' do
+        before do
+          http_login('survey', 'survey')
+        end
+        
+        it 'should return a 200' do
+          get :show, id: 'auth-survey'
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'renders the show template' do
+          get :show, id: 'auth-survey'
+          expect(response).to render_template('show')
+        end
+
+        it' should instantiate a Markdown processor' do
+          get :show, id: 'auth-survey'
+          expect(assigns(:md)).to_not be_nil
+        end
+      end
+
+      context 'for an inactive survey' do
+        it 'should return a 404 Not Found' do
+          expect_any_instance_of(Survey).to receive(:active?).and_return(false)
+          get :show, id: 'auth-survey'
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context 'when the user presents incorrect credentials' do
+        it 'should return a 401 Unauthorized' do
+          http_login('wrong', 'wronger')
+          get :show, id: 'auth-survey'
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
+
+    context 'for a survey with an unknown type of access' do
+      it 'should raise a server error' do
+        expect_any_instance_of(Survey).to receive(:access_params).and_return({type: 'foobar'})
+        get :show, id: 'sample-survey'
+        expect(response).to have_http_status(:not_found)
+      end
     end
 
     context 'for a JSON request' do
       it 'should return a JSON file' do
-        get :show, id: 'sample-survey', format: 'json'
+        get :survey_json, id: 'sample-survey'
         expect(response).to have_http_status(:ok)
         expect { JSON.parse(response.body) }.to_not raise_error
       end
 
       it 'should return a 404 if not active' do
         expect_any_instance_of(Survey).to receive(:active?).and_return(false)
-        get :show, id: 'sample-survey', format: 'json'
+        get :survey_json, id: 'sample-survey'
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -109,16 +152,18 @@ RSpec.describe SurveysController, type: :controller do
         end
 
         it 'should destroy the token' do
-          expect(survey.valid_token?(token)).to be_truthy
+          expect(SurveyToken.valid?(survey.survey_id, token)).to be_truthy
           post :submit, params
-          expect(survey.valid_token?(token)).to be_falsey
+          expect(SurveyToken.valid?(survey.survey_id, token)).to be_falsey
         end
 
         it 'should not allow replays with the same token' do
-          expect(survey.valid_token?(token)).to be_truthy
+          expect(SurveyToken.valid?(survey.survey_id, token)).to be_truthy
           post :submit, params
           t1 = survey.tally_for('ice-cream', 'yes')
           expect(t1).to eq(1)
+
+          expect(SurveyToken.valid?(survey.survey_id, token)).to be_falsey
 
           post :submit, params
           expect(response).to have_http_status(:not_found)
@@ -141,7 +186,7 @@ RSpec.describe SurveysController, type: :controller do
 
         it 'should not destroy the token' do
           post :submit, params
-          expect(survey.valid_token?(token)).to be_truthy
+          expect(SurveyToken.valid?(survey.survey_id, token)).to be_truthy
         end
       end
 

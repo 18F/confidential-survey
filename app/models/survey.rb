@@ -17,7 +17,7 @@ class Survey
 
   def initialize(arg)
     raise ActiveRecord::NotFound if arg.nil?
-    
+
     hash = case arg
            when String
              YAML.load(File.open(Rails.root.join('config', 'surveys', "#{arg}.yml"))).merge('id' => arg)
@@ -59,18 +59,19 @@ class Survey
     !(@hash.key?('active') && @hash['active'] == false)
   end
 
-  def valid_token?(token)
-    SurveyToken.valid?(survey_id, token)
-  end
+  # Access params
+  def access_params
+    if @access_params.nil?
+      @access_params = @hash['access'] || {'type' => 'token'}
+    end
 
-  def revoke_token(token)
-    SurveyToken.revoke(survey_id, token)
+    @access_params
   end
 
   def revoke_all_tokens
     SurveyToken.revoke_all_for_survey(survey_id)
   end
-  
+
   def survey_id
     @hash['id']
   end
@@ -94,7 +95,12 @@ class Survey
 
   def intersections
     if @intersections.nil?
-      @intersections = @hash['intersections'].map {|h| Intersection.new(self, h) }
+      @intersections =
+        unless @hash['intersections'].nil?
+          @hash['intersections'].map {|h| Intersection.new(self, h) }
+        else
+          []
+        end
     end
 
     @intersections
@@ -115,7 +121,7 @@ class Survey
   def participants
     tally_for(SURVEY_META_KEY, SURVEY_PARTICIPANTS)
   end
-  
+
   private
 
   def validate_survey

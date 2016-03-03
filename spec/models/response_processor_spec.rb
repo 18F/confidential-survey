@@ -126,6 +126,7 @@ RSpec.describe ResponseProcessor, type: :model do
       it 'should count the intersection of both elements' do
         expect(@survey.tally_for('flavor', 'chocolate')).to eq(2)
         expect(@survey.tally_for('flavor|toppings', 'chocolate|sprinkles')).to eq(1)
+        expect(@survey.tally_for('flavor|toppings', 'chocolate|hot-fudge')).to eq(2)
       end
     end
     

@@ -1,24 +1,21 @@
 # The only controller we need for handling the survey form for now
 class SurveysController < ApplicationController
-  before_action :load_survey, only: [:submit, :show, :results, :generate_token, :revoke_tokens]
+  before_action :load_survey, only: [:submit, :show, :survey_json, :results, :generate_token, :revoke_tokens]
 
   def show
-    respond_to do |format|
-      format.html do
-        validate_survey_token!
-        @md = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
-      end
+    check_access_allowed!
+    @hidden = access_control.hidden_form_variables(params)
+    @md = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
+  end
 
-      format.json do
-        render json: Serializers::Survey.new(@survey).as_json
-      end
-    end
+  def survey_json
+    render json: Serializers::Survey.new(@survey).as_json
   end
 
   def submit
-    validate_survey_token!
+    check_access_allowed!
     ResponseProcessor.new(params[:survey], @survey).perform
-    revoke_survey_token!
+    revoke_access!
     redirect_to(action: :thanks)
   end
 
@@ -50,8 +47,10 @@ class SurveysController < ApplicationController
 
   rescue_from ActionController::RoutingError, with: -> { render_404 }
   rescue_from ActiveRecord::RecordNotFound, with: -> { render_404 }
-
+  rescue_from AccessException, with: -> { render_404 }
+  
   def render_404
+    return if status == 401  # for HTTP auth support
     respond_to do |format|
       format.html { render text: 'not found', status: 404 }
       format.all { render nothing: true, status: 404 }
@@ -63,12 +62,30 @@ class SurveysController < ApplicationController
     fail ActiveRecord::RecordNotFound unless @survey.active?
   end
 
-  def validate_survey_token!
-    @token = params[:token]
-    fail ActiveRecord::RecordNotFound unless @survey.valid_token?(@token)
+  def access_params
+    @access_params ||= @survey.access_params
+  end
+  
+  def access_control
+    if @access_control.nil?
+      @access_control = case access_params['type']
+                        when 'token'
+                          TokenAccess.new(@survey.survey_id)
+                        when 'http_auth'
+                          HttpAuth.new(self, access_params)
+                        else
+                          fail AccessException, "Unrecognized access control type: #{access_params['type']}"
+                        end
+    end
+
+    @access_control
+  end
+  
+  def check_access_allowed!
+    fail AccessException unless access_control.allowed?(params)
   end
 
-  def revoke_survey_token!
-    @survey.revoke_token(@token)
+  def revoke_access!
+    access_control.revoke_for_user(params)
   end
 end

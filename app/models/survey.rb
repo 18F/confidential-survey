@@ -1,7 +1,12 @@
+# frozen_string_literal: true
+
 # A record to represent a survey. This is not an ActiveRecord-based model, just
 # a place to centralize the survey-loading, processing in an object.
 class Survey
   include ActiveModel::Conversion
+
+  SURVEY_META_KEY = '_survey'.freeze
+  SURVEY_PARTICIPANTS = 'participants'.freeze
 
   # Needed to make Rails forms happy
   def model_name
@@ -13,6 +18,8 @@ class Survey
   end
 
   def initialize(arg)
+    fail ActiveRecord::NotFound if arg.nil?
+
     hash = case arg
            when String
              YAML.load(File.open(Rails.root.join('config', 'surveys', "#{arg}.yml"))).merge('id' => arg)
@@ -29,10 +36,6 @@ class Survey
     raise ActiveRecord::RecordNotFound, "Survey #{arg} not found"
   end
 
-  def title
-    @hash['title']
-  end
-
   def intro
     if @intro.nil?
       @intro = @hash['intro']
@@ -46,12 +49,29 @@ class Survey
     @intro
   end
 
+  def title
+    @hash['title']
+  end
+
   def description
     @hash['description']
   end
 
   def active?
     !(@hash.key?('active') && @hash['active'] == false)
+  end
+
+  # Access params
+  def access_params
+    if @access_params.nil?
+      @access_params = @hash['access'] || {'type' => 'token'}
+    end
+
+    @access_params
+  end
+
+  def revoke_all_tokens
+    SurveyToken.revoke_all_for_survey(survey_id)
   end
 
   def survey_id
@@ -67,13 +87,22 @@ class Survey
     @questions
   end
 
+  def valid_question_key?(key)
+    questions.detect {|q| q.key == key } != nil
+  end
+
   def [](key)
     questions.detect {|q| q.key == key }
   end
 
   def intersections
     if @intersections.nil?
-      @intersections = @hash['intersections'].map {|h| Intersection.new(self, h) }
+      @intersections =
+        if @hash['intersections'].nil?
+          []
+        else
+          @hash['intersections'].map {|h| Intersection.new(self, h) }
+        end
     end
 
     @intersections
@@ -87,17 +116,25 @@ class Survey
     Tally.where(survey_id: survey_id, field: field)
   end
 
+  def count_participant
+    Tally.record(survey_id, SURVEY_META_KEY, SURVEY_PARTICIPANTS)
+  end
+
+  def participants
+    tally_for(SURVEY_META_KEY, SURVEY_PARTICIPANTS)
+  end
+
   private
 
   def validate_survey
     fail 'You must include an id field in the survey' if survey_id.blank?
   end
 
-  def method_missing(method_sym, *arguments, &block)
-    if @hash['questions'].any? {|h| h['key'] == method_sym.to_s }
-      nil
-    else
-      super
-    end
-  end
+  # def method_missing(method_sym, *arguments, &block)
+  #   if @hash['questions'].any? {|h| h['key'] == method_sym.to_s }
+  #     nil
+  #   else
+  #     super
+  #   end
+  # end
 end

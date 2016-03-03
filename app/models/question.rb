@@ -36,6 +36,12 @@ class Question
     @choices ||= @hash['values'].map {|v| Choice.new(self, v) }
   end
 
+  def valid_choice_value?(value)
+    return true if freeform?
+    choices.detect {|c| c.value == value } != nil ||
+      (value == Choice::COMBINATION_VALUE && exclusive_combo?)
+  end
+
   def tallies
     Tally.tallies_for(survey_id, key)
   end
@@ -69,7 +75,7 @@ class Question
     when freeform?
       [[key, responses.first]]
     when exclusive?
-      fail 'Multiple responses for an exclusive question' if responses.length > 1
+      fail SurveyError, 'Multiple responses for an exclusive question' if responses.length > 1
       [[key, responses.first]]
     when exclusive_combo?
       if responses.length > 1

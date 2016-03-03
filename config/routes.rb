@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  get 'surveys/thanks' => 'surveys#thanks'
-  get 'surveys/:id' => 'surveys#show'
+  get 'surveys/thanks' => 'surveys#thanks', as: 'thanks'
+  get 'surveys/:id' => 'surveys#show', as: 'survey'
+  get 'results/:id.json' => 'surveys#survey_json', as: 'survey_json'
+  match 'surveys/:id/token' => 'surveys#generate_token', as: 'generate_token', via: %w(get post)
+  match 'surveys/:id/revoke' => 'surveys#revoke_tokens', via: %w(get post)
   post 'surveys/:id' => 'surveys#submit', as: 'survey_submit'
 
   # The priority is based upon order of creation: first created -> highest priority.

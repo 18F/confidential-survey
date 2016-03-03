@@ -4,9 +4,15 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  # rubocop:disable Style/GlobalVars
-  unless Rails.env.development? || Rails.env.test?
-    http_basic_authenticate_with name: $auth_name, password: $auth_password
+  def require_admin_auth!
+    require_http_auth!(admin_auth_name, admin_auth_password)
   end
-  # rubocop:enable Style/GlobalVars
+
+  def require_http_auth!(name, password)
+    authenticated = authenticate_or_request_with_http_basic('Administration') do |provided_name, provided_password|
+      name == provided_name && password == provided_password
+    end
+
+    authenticated == true
+  end
 end

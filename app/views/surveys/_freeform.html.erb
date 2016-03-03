@@ -1,4 +1,4 @@
 <div class="input">
-  <%= form.label question.key, question.text %>
-  <%= form.text_field question.key %>
+  <%= label_tag "survey[#{question.key}]", question.text %>
+  <%= text_field_tag "survey[#{question.key}]" %>
 </div>

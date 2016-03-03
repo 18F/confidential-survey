@@ -7,4 +7,3 @@ def admin_auth_password
   fail 'You must provide an SURVEY_ADMIN_PASSWORD' if ENV['SURVEY_ADMIN_PASSWORD'].blank?
   ENV['SURVEY_ADMIN_PASSWORD']
 end
-

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A record to represent a survey. This is not an ActiveRecord-based model, just
 # a place to centralize the survey-loading, processing in an object.
 class Survey
@@ -16,7 +18,7 @@ class Survey
   end
 
   def initialize(arg)
-    raise ActiveRecord::NotFound if arg.nil?
+    fail ActiveRecord::NotFound if arg.nil?
 
     hash = case arg
            when String
@@ -96,10 +98,10 @@ class Survey
   def intersections
     if @intersections.nil?
       @intersections =
-        unless @hash['intersections'].nil?
-          @hash['intersections'].map {|h| Intersection.new(self, h) }
-        else
+        if @hash['intersections'].nil?
           []
+        else
+          @hash['intersections'].map {|h| Intersection.new(self, h) }
         end
     end
 

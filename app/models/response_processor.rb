@@ -20,8 +20,10 @@ class ResponseProcessor < Struct.new(:params, :survey)
       fail SurveyError, "Question #{key} not found" if question.nil?
 
       question.response_pairs(answers).each do |pair|
-        fail SurveyError, "Invalid choice '#{pair.last}' for question #{key}" unless question.valid_choice_value?(pair.last)
-        
+        fail SurveyError,
+             "Invalid choice '#{pair.last}' for question #{key}" unless
+          question.valid_choice_value?(pair.last)
+
         pending[pair.first] ||= []
         pending[pair.first] << pair.last
       end

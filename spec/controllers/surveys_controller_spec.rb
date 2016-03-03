@@ -65,7 +65,7 @@ RSpec.describe SurveysController, type: :controller do
         before do
           http_login('survey', 'survey')
         end
-        
+
         it 'should return a 200' do
           get :show, id: 'auth-survey'
           expect(response).to have_http_status(:ok)
@@ -101,7 +101,7 @@ RSpec.describe SurveysController, type: :controller do
 
     context 'for a survey with an unknown type of access' do
       it 'should raise a server error' do
-        expect_any_instance_of(Survey).to receive(:access_params).and_return({type: 'foobar'})
+        expect_any_instance_of(Survey).to receive(:access_params).and_return(type: 'foobar')
         get :show, id: 'sample-survey'
         expect(response).to have_http_status(:not_found)
       end

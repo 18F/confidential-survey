@@ -48,9 +48,9 @@ class SurveysController < ApplicationController
   rescue_from ActionController::RoutingError, with: -> { render_404 }
   rescue_from ActiveRecord::RecordNotFound, with: -> { render_404 }
   rescue_from AccessException, with: -> { render_404 }
-  
+
   def render_404
-    return if status == 401  # for HTTP auth support
+    return if status == 401 # for HTTP auth support
     respond_to do |format|
       format.html { render text: 'not found', status: 404 }
       format.all { render nothing: true, status: 404 }
@@ -65,7 +65,7 @@ class SurveysController < ApplicationController
   def access_params
     @access_params ||= @survey.access_params
   end
-  
+
   def access_control
     if @access_control.nil?
       @access_control = case access_params['type']
@@ -80,7 +80,7 @@ class SurveysController < ApplicationController
 
     @access_control
   end
-  
+
   def check_access_allowed!
     fail AccessException unless access_control.allowed?(params)
   end

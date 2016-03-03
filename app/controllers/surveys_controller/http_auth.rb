@@ -10,7 +10,7 @@ class SurveysController
         @user.blank? || @password.blank?
     end
 
-    def allowed?(params)
+    def allowed?(_)
       authenticated = @controller.authenticate_or_request_with_http_basic('Administration') do |user, password|
         @user == user && @password == password
       end
@@ -18,11 +18,11 @@ class SurveysController
       authenticated == true
     end
 
-    def revoke_for_user(params)
+    def revoke_for_user(_)
       # does nothing
     end
 
-    def hidden_form_variables(params)
+    def hidden_form_variables(_)
       {}
     end
   end

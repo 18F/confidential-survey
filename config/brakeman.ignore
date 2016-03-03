@@ -1,0 +1,24 @@
+{
+  "ignored_warnings":[
+    {
+      "warning_type":"Cross Site Scripting",
+      "warning_code":2,
+      "fingerprint":"9128e80673f97b04f9dec3e81264299d07616b1be24957acbb99fd4d450e210e",
+      "message":"Unescaped model attribute",
+      "file":"app/views/surveys/show.html.erb",
+      "line":8,
+      "link":"http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code":"Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(Survey.new(params[:id]).intro)",
+      "render_path":[{"type":"controller","class":"SurveysController","method":"show","line":9,"file":"app/controllers/surveys_controller.rb"}],
+      "location":{
+        "type":"template",
+        "template":"surveys/show"
+      },
+      "user_input":"Survey.new(params[:id]).intro",
+      "confidence":"Weak",
+      "note":"This intro is loaded from the survey config and is not set by the user. Not a XSS vector."
+    }
+  ],
+  "updated":"2016-03-02 19:07:10 -0500",
+  "brakeman_version":"3.1.5"
+}

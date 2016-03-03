@@ -38,10 +38,10 @@ class Question
 
   def valid_choice_value?(value)
     return true if freeform?
-    choices.detect {|c| c.value == value} != nil ||
+    choices.detect {|c| c.value == value } != nil ||
       (value == Choice::COMBINATION_VALUE && exclusive_combo?)
   end
-  
+
   def tallies
     Tally.tallies_for(survey_id, key)
   end

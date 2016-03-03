@@ -68,7 +68,6 @@ RSpec.describe ResponseProcessor, type: :model do
           expect { processor.perform }.to raise_error(SurveyError)
         end
       end
-
     end
 
     context 'for a true multiple field' do
@@ -126,17 +125,18 @@ RSpec.describe ResponseProcessor, type: :model do
       it 'should count the intersection of both elements' do
         expect(@survey.tally_for('flavor', 'chocolate')).to eq(2)
         expect(@survey.tally_for('flavor|toppings', 'chocolate|sprinkles')).to eq(1)
+        expect(@survey.tally_for('flavor|toppings', 'chocolate|hot-fudge')).to eq(2)
       end
     end
-    
+
     context 'when sent a nonexistent field name' do
-      let(:params) { {'foo' => %w(bar) } }
+      let(:params) { {'foo' => %w(bar)} }
       before(:all) { Tally.delete_all }
-      
+
       it 'should raise an error' do
         expect { processor.perform }.to raise_error(SurveyError)
       end
-      
+
       it 'should not record a tally' do
         expect { processor.perform }.to raise_error(SurveyError)
         expect(@survey.tally_for('foo', 'bar')).to eq(0)
@@ -147,7 +147,7 @@ RSpec.describe ResponseProcessor, type: :model do
         expect(@survey.participants).to eq(0)
       end
     end
-    
+
     context 'when accepting multiple fields' do
       let(:params) do
         {
@@ -197,7 +197,7 @@ RSpec.describe ResponseProcessor, type: :model do
           end
         end
       end
-      
+
       it 'should not increment the number of the participants' do
         before = @survey.participants
         expect { processor.perform }.to raise_error(SurveyError)

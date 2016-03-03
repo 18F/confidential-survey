@@ -1,0 +1,27 @@
+title: Killer Robot Survey
+intro: This is another fake survey to test HTTP authentication
+access:
+  type: http_auth
+  user: survey
+  password: survey
+questions:
+  -
+    key: like
+    text: Do you like killer robots?
+    type: exclusive
+    values:
+      - Yes
+      - No
+      - Maybe
+      - Not Sure
+      - decline|Decline to Answer
+  -
+    key: attachments
+    text: Favorite attachments?
+    type: multiple
+    values:
+      - laser|Lasers
+      - chainsaw|Chainsaw
+      - harpoon|Harpoon
+      - hammer|Hammer
+      - teddy-bear|Teddy Bear

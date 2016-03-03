@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.3.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.5.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -30,7 +30,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'us_web_design_standards' #, git: 'https://github.com/18F/us_web_design_standards_gem.git'
+gem 'us_web_design_standards' # , git: 'https://github.com/18F/us_web_design_standards_gem.git'
 gem 'flutie'
 gem 'high_voltage'
 gem 'neat', '~> 1.7.0'
@@ -40,6 +40,7 @@ gem 'title'
 gem 'ice_nine'
 gem 'redcarpet'
 gem 'silencer'
+gem 'reek'
 
 group :production do
   gem 'rails_12factor'
@@ -54,7 +55,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'reek'
   gem 'awesome_print'
   gem 'bundler-audit', require: false
   gem 'byebug'

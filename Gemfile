@@ -41,6 +41,7 @@ gem 'ice_nine'
 gem 'redcarpet'
 gem 'silencer'
 gem 'reek'
+gem 'newrelic_rpm'
 
 group :production do
   gem 'rails_12factor'

@@ -5,7 +5,6 @@ class SurveysController
     end
 
     def allowed?(params)
-      @token = params[:token]
       SurveyToken.valid?(@survey_id, params[:token])
     end
 

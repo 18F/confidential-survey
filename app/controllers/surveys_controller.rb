@@ -23,12 +23,12 @@ class SurveysController < ApplicationController
     require_admin_auth! || return
     out = ''
 
-    n = 1
-    n = params[:n].to_i if params[:n]
+    n = params[:n].to_i || 1
 
     n.times.each do
-      token = SurveyToken.generate(@survey.survey_id)
-      out << survey_url(@survey.survey_id) + '?token=' + token + "\n"
+      survey_id = @survey.survey_id
+      token = SurveyToken.generate(survey_id)
+      out << survey_url(survey_id) + '?token=' + token + "\n"
     end
 
     render text: out, status: :ok
@@ -68,13 +68,14 @@ class SurveysController < ApplicationController
 
   def access_control
     if @access_control.nil?
-      @access_control = case access_params['type']
+      type = access_params['type']
+      @access_control = case type
                         when 'token'
                           TokenAccess.new(@survey.survey_id)
                         when 'http_auth'
                           HttpAuth.new(self, access_params)
                         else
-                          fail AccessException, "Unrecognized access control type: #{access_params['type']}"
+                          fail AccessException, "Unrecognized access control type: #{type}"
                         end
     end
 

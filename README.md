@@ -7,9 +7,9 @@ confidential surveys in a way that doesn't result in a large table of
 sensitive records.
 
 The basic idea is to not store individual form responses as records,
-but to instead use the submission to increment the appropriate
+but to instead use the survey response just to increment the appropriate
 counters. This allows to derive the statistics we want to ultimately
-measure without assembling a large database of individual responses.
+measure without assembling a large database of individual responses. This principle of collecting only the minimum amount of information is also known as [Datensparsamkeit](http://martinfowler.com/bliki/Datensparsamkeit.html), which is just a cool word to say.
 
 [This diagram illustrates the difference from a traditional survey.](doc/how-the-survey-works.pdf)
 

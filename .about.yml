@@ -42,15 +42,15 @@ testable: true
 #   role: Team member's role; leads should be designated as 'lead'
 team:
 - github: harrisj
-  id: Jacob Harris
+  id: jacob.harris
   role: Lead Developer
 
 - github: annahsebok
-  id: Anna Heller Sebok
+  id: anna.sebok
   role: Product Manager
 
 - github: xtine
-  id: Christine Cheung
+  id: christine.cheung
   role: Designer
 
 # Partners for whom the project is developed
@@ -65,8 +65,8 @@ partners:
 #-
 
 # Brief descriptions of significant project developments
-#milestones:
-#-
+# milestones:
+# - "ATO"
 
 # Technologies used to build the project
 stack:

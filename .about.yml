@@ -23,7 +23,7 @@ owner_type: working-group
 stage: alpha
 
 # Description of the project
-description: A tool for conducting surveys of confidential and personal information like employee diversity that avoids collecting individual responses as records
+description: A tool for conducting surveys derived from confidential and personal responses that only records aggregate counts and does not retain any personal information.
 
 # Tags that describe the project or aspects of the project
 tags:
@@ -43,7 +43,7 @@ testable: true
 team:
 - github: harrisj
   id: jacob.harris
-  role: Lead Developer
+  role: Lead
 
 - github: annahsebok
   id: anna.sebok
@@ -65,8 +65,8 @@ partners:
 #-
 
 # Brief descriptions of significant project developments
-# milestones:
-# - "ATO"
+milestones:
+- "March 2016: ATO"
 
 # Technologies used to build the project
 stack:
@@ -81,8 +81,23 @@ impact: This tool will allow us to conduct surveys on diversity without causing 
 #   category: Type of the service
 #   url: URL for detailed information
 #   badge: URL for the status badge
-#services:
-#-
+services:
+- name: Code Climate
+  category: Site review
+  url: https://codeclimate.com/github/18F/confidential-survey
+  badge: https://codeclimate.com/github/18F/confidential-survey/badges/gpa.svg
+- name: Gemnasium
+  category: Dependency Checking
+  url: https://gemnasium.com/18F/confidential-survey
+  badge: https://gemnasium.com/18F/confidential-survey.svg
+- name: Hakiri
+  category: Static analysis
+  url: https://hakiri.io/github/18F/confidential-survey
+  badge: https://hakiri.io/github/18F/confidential-survey/develop.svg
+- name: Travis CI
+  category: Build review
+  url: https://travis-ci.org/18F/confidential-survey
+  badge: https://travis-ci.org/18F/confidential-survey.svg?branch=develop
 
 # Licenses that apply to the project and/or its components (required)
 # Items by property name pattern:

@@ -1,6 +1,6 @@
 # The only controller we need for handling the survey form for now
 class SurveysController < ApplicationController
-  before_action :load_survey, only: [:submit, :show, :survey_json, :results, :generate_token, :revoke_tokens]
+  before_action :load_survey, only: [:submit, :show, :results, :generate_token, :revoke_tokens]
 
   def show
     check_access_allowed!
@@ -9,6 +9,7 @@ class SurveysController < ApplicationController
   end
 
   def survey_json
+    @survey = Survey.new(params[:id])
     render json: Serializers::Survey.new(@survey).as_json
   end
 

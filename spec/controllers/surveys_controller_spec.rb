@@ -106,22 +106,57 @@ RSpec.describe SurveysController, type: :controller do
         expect(response).to have_http_status(:not_found)
       end
     end
+  end
 
-    context 'for a JSON request' do
-      it 'should return a JSON file' do
+  describe 'survey_json' do
+    context 'for an active survey' do
+      it 'should return a 200 OK' do
         get :survey_json, id: 'sample-survey'
         expect(response).to have_http_status(:ok)
-        expect { JSON.parse(response.body) }.to_not raise_error
       end
+      
+      it 'should include not include questions and counts' do
+        json = nil
+        get :survey_json, id: 'sample-survey'
 
-      it 'should return a 404 if not active' do
+        expect { json = JSON.parse(response.body) }.to_not raise_error
+
+        expect(json['id']).to eq('sample-survey')
+        expect(json['title']).to eq('Ice Cream Survey')
+        expect(json['questions']).to be_nil
+        expect(json['intersections']).to be_nil
+      end
+    end
+
+    context 'for an inactive survey' do
+      it 'should return a 200 OK' do
         expect_any_instance_of(Survey).to receive(:active?).and_return(false)
         get :survey_json, id: 'sample-survey'
+        expect(response).to have_http_status(:ok)
+      end
+      
+      it 'should include questions and counts' do
+        expect_any_instance_of(Survey).to receive(:active?).and_return(false)
+        get :survey_json, id: 'sample-survey'
+        json = nil
+        expect { json = JSON.parse(response.body) }.to_not raise_error
+
+        expect(json['id']).to eq('sample-survey')
+        expect(json['title']).to eq('Ice Cream Survey')
+        expect(json['questions']).to_not be_nil
+        expect(json['questions'].first['key']).to eq('ice-cream')
+        expect(json['intersections']).to_not be_nil
+      end
+    end
+
+    context 'if a survey is not found' do
+      it 'should return a 404' do
+        get :survey_json, id: 'foobar'
         expect(response).to have_http_status(:not_found)
       end
     end
   end
-
+  
   describe 'submit' do
     let(:survey) { Survey.new('sample-survey') }
     let(:token) { SurveyToken.generate('sample-survey') }

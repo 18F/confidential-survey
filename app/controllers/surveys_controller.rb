@@ -21,7 +21,7 @@ class SurveysController < ApplicationController
   end
 
   def generate_token
-    require_admin_auth! || return
+    require_admin_auth!
     out = ''
 
     n = 1
@@ -36,7 +36,7 @@ class SurveysController < ApplicationController
   end
 
   def revoke_tokens
-    require_admin_auth! || return
+    require_admin_auth!
     @survey.revoke_all_tokens
     render text: 'All tokens revoked', status: :ok
   end

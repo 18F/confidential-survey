@@ -6,7 +6,7 @@ class SurveysController
 
     def allowed?(params)
       @token = params[:token]
-      SurveyToken.valid?(@survey_id, params[:token])
+      SurveyToken.valid?(@survey_id, @token)
     end
 
     def revoke_for_user(params)

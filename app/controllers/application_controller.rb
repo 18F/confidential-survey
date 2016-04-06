@@ -13,6 +13,6 @@ class ApplicationController < ActionController::Base
       name == provided_name && password == provided_password
     end
 
-    authenticated == true
+    fail SurveysController::AccessException unless authenticated == true
   end
 end

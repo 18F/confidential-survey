@@ -114,7 +114,7 @@ RSpec.describe SurveysController, type: :controller do
         get :survey_json, id: 'sample-survey'
         expect(response).to have_http_status(:ok)
       end
-      
+
       it 'should include not include questions and counts' do
         json = nil
         get :survey_json, id: 'sample-survey'
@@ -134,7 +134,7 @@ RSpec.describe SurveysController, type: :controller do
         get :survey_json, id: 'sample-survey'
         expect(response).to have_http_status(:ok)
       end
-      
+
       it 'should include questions and counts' do
         expect_any_instance_of(Survey).to receive(:active?).and_return(false)
         get :survey_json, id: 'sample-survey'
@@ -156,7 +156,7 @@ RSpec.describe SurveysController, type: :controller do
       end
     end
   end
-  
+
   describe 'submit' do
     let(:survey) { Survey.new('sample-survey') }
     let(:token) { SurveyToken.generate('sample-survey') }

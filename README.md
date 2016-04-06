@@ -1,15 +1,15 @@
 [![Code Climate](https://codeclimate.com/github/18F/confidential-survey/badges/gpa.svg)](https://codeclimate.com/github/18F/confidential-survey) [![Test Coverage](https://codeclimate.com/github/18F/confidential-survey/badges/coverage.svg)](https://codeclimate.com/github/18F/confidential-survey/coverage) [![Dependency Status](https://gemnasium.com/18F/confidential-survey.svg)](https://gemnasium.com/18F/confidential-survey) [![security](https://hakiri.io/github/18F/confidential-survey/develop.svg)](https://hakiri.io/github/18F/confidential-survey/develop) [![Build Status](https://travis-ci.org/18F/confidential-survey.svg?branch=develop)](https://travis-ci.org/18F/confidential-survey)
 
-# Confidential Survey (v 0.2.0)
+# Confidential Survey (v 0.2.1)
 
-This is a prototype application for gathering responses from
-confidential surveys in a way that doesn't result in a large table of
-sensitive records.
+This is an application for gathering responses from confidential
+surveys in a way that doesn't result in a large table of sensitive
+records.
 
-The basic idea is to not store individual form responses as records,
-but to instead use the survey response just to increment the
-appropriate counters. This allows to derive the statistics we want to
-ultimately measure without assembling a large database of individual
+The basic idea is to not store individual form responses as records
+but instead only use the survey response just to increment the
+appropriate counters. This allows us to derive the statistics we want
+to ultimately measure without assembling a large database of private
 responses. This principle of collecting only the minimum amount of
 information is also known as
 [Datensparsamkeit](http://martinfowler.com/bliki/Datensparsamkeit.html),
@@ -23,7 +23,7 @@ So, if we had a survey on ice cream and we wanted to ask employees:
 - What toppings do you want on your sundae? (Sprinkles/Hot Fudge/..)
 - What is your favorite brand? (Fill in the Blank)
 
-And so on. We could classify the types of questions here among several
+And so on, we could classify the types of questions here among several
 distinct types to start with:
 
 - **exclusive** allow only one choice from the available options
@@ -33,19 +33,20 @@ distinct types to start with:
 - **multiple** record each choice picked by a user
 - **freefrom** accept freeform text
 
-So what? A survey about ice cream is admittedly a dumb example. It's
-something you could setup with an existing public service like
-SurveyMonkey or Google Forms. Imagine however that we wanted to ask
-questions about something more confidential like employee diversity or
-sexual orientation. These systems all collect individual responses as
-records or rows in a spreadsheet. While they are probably secure, why
-do I need this detailed information if I am just going to generate
-summary statistics anyway? Individual responses might be anonymous,
-but may endanger a respondent's privacy when combined together in a
-query.  Why should I be asking people to trust me that nobody will use
-these records to drill down and do something awful like count how many
-LGBT people are in the accounting department of the NYC office? What
-if the data collection only allowed for pre-approved interpretations?
+A survey about ice cream is admittedly a dumb example. It's something
+you could create with an existing public service like SurveyMonkey or
+Google Forms. Imagine however that we wanted to ask questions about
+something more confidential like employee diversity or sexual
+orientation. These systems all collect individual responses as
+database records or rows in a spreadsheet. While they are probably
+secure, why do I need this detailed information if I am only going to
+generate summary statistics anyway? Individual responses might be
+anonymous, but may endanger a respondent's privacy when combined
+together in a query.  Why should I be asking people to trust me that
+nobody will use these records to drill down and do something awful
+like count how many LGBT people are in the accounting department of
+the NYC office? What if the data collection only allowed for
+pre-approved interpretations?
 
 This program is written to automatically preserve privacy by
 discarding survey submissions and using them just to increment
@@ -73,9 +74,10 @@ prevent such analysis after the fact)
 - flavor:chocolate|topping:coconut 2
 and so on...
 
-Be careful: This functionality is meant for very broad intersections like
-`engineering/non-engineering` AND `gender` for instance. Fine-grained intersections
-could harm the privacy of individuals
+Be careful: This functionality is meant for very broad intersections
+like `engineering/non-engineering` AND `gender` for
+instance. Finer-grained intersections that span many fields and result
+in only a few responses could harm the privacy of individuals.
 
 This program has the following components:
 - A simple single-table DB schema for storing the counters
@@ -83,7 +85,7 @@ This program has the following components:
   for easy rendering into forms
 - The ability to specify _intersections_ between variables you want more
   detailed breakdowns of
-- A simple JSON API endpoint for returning the data collected.
+- A simple JSON API endpoint for returning the data collected to authorized administrators.
 
 ## Local Development
 
@@ -313,6 +315,10 @@ be compromised:
 - If the attacker had the ability to monitor incoming requests to the
   application as well, they could see a specific user's responses when
   they were submitted with the user's token.
+- If the attacker has the ability to view the database, he could
+  reverse engineer survey responses by capturing the tallies on a
+  quick interval and looking for differences in counts. Keep your
+  database secure.
 - Server logs could conceivably leak information about surveys. This
   application does not keep logs about submissions, but proper care
   should be taken to scrub logs at load balancers as well. In

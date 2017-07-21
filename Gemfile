@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
-ruby '2.3.0'
+ruby '2.3.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.6'
+gem 'rails', '4.2.7.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -39,10 +39,9 @@ gem 'title'
 gem 'ice_nine'
 gem 'redcarpet'
 gem 'silencer'
-gem 'reek'
-gem 'newrelic_rpm'
 
 group :production do
+  gem 'newrelic_rpm'
   gem 'rails_12factor'
   gem 'pg'
 end
@@ -55,6 +54,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'reek'
   gem 'capybara'
   gem 'awesome_print'
   gem 'bundler-audit', require: false
@@ -71,7 +71,8 @@ end
 
 group :test do
   gem 'timecop'
-  gem 'codeclimate-test-reporter', require: nil
+  gem 'simplecov', require: false
+  gem 'rspec_junit_formatter'
 end
 
 group :staging, :production do
